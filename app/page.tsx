@@ -19,6 +19,8 @@ import {
   ChartConfig,
 } from "@/components/ui/chart";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { LoginData } from "@/app/login/page";
+import { useNavigate } from "react-router-dom";
 
 const EASY_BSS_MAX = 2.5;
 const POSSIBLE_BSS_MAX = 4.0;
@@ -558,8 +560,13 @@ export function MyChart() {
 }
 
 export default function Home() {
-  const [ffscouterKey, setFfscouterKey] = useState("");
-  const [publicKey, setPublicKey] = useState("");
+  const navigate = useNavigate();
+  const login_data = new LoginData(navigate);
+  const keys = login_data.getKeys();
+
+  if (keys == null) {
+    navigate("/login");
+  }
 
   return (
     <div className="grid grid-cols-12 gap-10 m-10">
