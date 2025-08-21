@@ -1,6 +1,7 @@
 import * as z from "zod";
 
 export type keys = { ffScouterKey: string; publicKey: string };
+export type factionIds = { leftFactionId: string; rightFactionId: string };
 
 export class FairFightScore {
   name: string;
@@ -198,4 +199,3 @@ export type TornFactionBasicApi = z.infer<typeof TornFactionBasicApi>;
 //  };
 //  position: string;
 //}
-

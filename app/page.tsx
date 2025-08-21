@@ -1,9 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
 import { LoginForm } from "./login-form";
-import { FFScouterResult, keys, TornFactionBasicApi } from "./types";
+import {
+  FFScouterResult,
+  keys,
+  factionIds,
+  TornFactionBasicApi,
+} from "./types";
 import { Loader } from "lucide-react";
 import { MyChart } from "./chart";
+import { Button } from "@/components/ui/button";
+import { FactionInputForm } from "./faction-input-form";
 
 const getKeys = (): keys | undefined => {
   // We need this because window / localstorage might not exist as fast yet (for the first mount)
@@ -27,9 +34,32 @@ const getKeys = (): keys | undefined => {
   }
   return undefined;
 };
+const getFactionIds = (): factionIds | undefined => {
+  // We need this because window / localstorage might not exist as fast yet (for the first mount)
+  if (!window) {
+    return undefined;
+  }
+  const v = localStorage.getItem("factionIds");
+  console.log(v);
+  if (v == null) {
+    return undefined;
+  }
+  try {
+    const j = JSON.parse(v) as factionIds;
+    if (j.leftFactionId && j.rightFactionId) {
+      return j;
+    }
+  } catch (e) {
+    console.log("Error parsing stored keys:", e);
+    localStorage.removeItem("factionIds");
+    return undefined;
+  }
+  return undefined;
+};
 
 export default function SPA() {
   const [keys, setKeys] = useState<keys>();
+  const [factionIds, setFactionIds] = useState<factionIds>();
   const [rightFFScouterData, setRightFFScouterData] =
     useState<FFScouterResult>();
   //make sure to pass types here just as above
@@ -43,26 +73,47 @@ export default function SPA() {
   //thats the cleanest way of doing things i think
   useEffect(() => {
     setKeys(getKeys());
+    setFactionIds(getFactionIds());
   }, []);
 
+  const logout = () => {
+    localStorage.removeItem("keys");
+    setKeys(undefined);
+  };
+
+  const reset = () => {
+    localStorage.removeItem("factionIds");
+    setFactionIds(undefined);
+  };
+
   useEffect(() => {
-    if (!keys) {
+    if (!keys || !factionIds) {
       return;
     }
     const queryString = new URLSearchParams({
       selections: "basic",
       key: keys.publicKey,
     });
-    fetch("https://api.torn.com/faction/37498?" + queryString.toString())
+    fetch(
+      "https://api.torn.com/faction/" +
+        factionIds.leftFactionId +
+        "?" +
+        queryString.toString(),
+    )
       .then((res) => res.json())
       .then((value) => TornFactionBasicApi.parse(value))
       .then((value: TornFactionBasicApi) => setLeftFactionBasic(value));
 
-    fetch("https://api.torn.com/faction/44040?" + queryString.toString())
+    fetch(
+      "https://api.torn.com/faction/" +
+        factionIds.rightFactionId +
+        "?" +
+        queryString.toString(),
+    )
       .then((res) => res.json())
       .then((value) => TornFactionBasicApi.parse(value))
       .then((value: TornFactionBasicApi) => setRightFactionBasic(value));
-  }, [keys]);
+  }, [keys, factionIds]);
 
   //run this every time keys changes
   useEffect(() => {
@@ -103,6 +154,22 @@ export default function SPA() {
     );
   }
 
+  if (!factionIds) {
+    return (
+      <>
+        <div className="container mx-auto grow flex items-center">
+          <Button onClick={logout}>Logout</Button>
+        </div>
+        <div className="container mx-auto grow flex items-center">
+          <FactionInputForm
+            className="w-full"
+            setFactionIds={setFactionIds}
+          ></FactionInputForm>
+        </div>
+      </>
+    );
+  }
+
   if (
     !leftFactionBasic ||
     !rightFactionBasic ||
@@ -118,6 +185,15 @@ export default function SPA() {
 
   return (
     <div className="grid grid-cols-12 gap-10 m-10">
+      <Button onClick={reset} className="lg:col-span-4 col-span-6">
+        Reset
+      </Button>
+      <Button
+        onClick={logout}
+        className="lg:col-span-4 col-span-6 lg:col-end-13 lg:col-start-9"
+      >
+        Logout
+      </Button>
       <MyChart
         leftffscouterdata={leftFFScouterData}
         rightffscouterdata={rightFFScouterData}
