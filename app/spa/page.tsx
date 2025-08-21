@@ -97,14 +97,6 @@ export default function SPA() {
       .then((value: FFScouterResult) => setRightFFScouterData(value));
   }, [keys, rightFactionBasic]);
 
-  if (loading) {
-    return (
-      <div className="container mx-auto grow flex items-center">
-        <Loader className="animate-spin w-full"></Loader>
-      </div>
-    );
-  }
-
   if (!keys) {
     return (
       <div className="container mx-auto grow flex items-center">
@@ -112,7 +104,7 @@ export default function SPA() {
       </div>
     );
   }
-  //expand for every prop passed.
+
   if (
     !leftFactionBasic ||
     !rightFactionBasic ||
@@ -125,8 +117,6 @@ export default function SPA() {
       </div>
     );
   }
-
-  console.log("I got here!");
 
   return (
     <div className="grid grid-cols-12 gap-10 m-10">

@@ -38,6 +38,10 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const EASY_COLOR = "#226600";
+const POSSIBLE_COLOR = "#aab000";
+const HARD_COLOR = "#ff9933";
+
 interface ChartInterface {
   leftffscouterdata: FFScouterResult;
   rightffscouterdata: FFScouterResult;
@@ -60,11 +64,17 @@ export function MyChart({
   const max_yaxis = Math.max(left_data.length, right_data.length);
 
   const [leftSelected, setLeftSelected] = useState<DrillDownData[]>([]);
+  const [leftNameSelected, setLeftNameSelected] = useState("");
   const [rightSelected, setRightSelected] = useState<DrillDownData[]>([]);
+  const [rightNameSelected, setRightNameSelected] = useState("");
 
-  function handleClick(setter: Dispatch<SetStateAction<DrillDownData[]>>) {
+  function handleClick(
+    setter: Dispatch<SetStateAction<DrillDownData[]>>,
+    nameSetter: Dispatch<SetStateAction<string>>,
+  ) {
     return function (data: GraphData) {
       setter(massage_graph_data(data));
+      nameSetter(data.name);
     };
   }
 
@@ -135,15 +145,15 @@ export function MyChart({
           (value) => value.attacker_ff > POSSIBLE_BSS_MAX,
         ),
         easy_defends: opponent_scores.filter(
-          (value) => value.defender_ff <= EASY_BSS_MAX,
+          (value) => value.defender_ff >= POSSIBLE_BSS_MAX,
         ),
         possible_defends: opponent_scores.filter(
           (value) =>
-            value.defender_ff <= POSSIBLE_BSS_MAX &&
-            value.defender_ff > EASY_BSS_MAX,
+            value.defender_ff < POSSIBLE_BSS_MAX &&
+            value.defender_ff >= EASY_BSS_MAX,
         ),
         hard_defends: opponent_scores.filter(
-          (value) => value.defender_ff > POSSIBLE_BSS_MAX,
+          (value) => value.defender_ff < EASY_BSS_MAX,
         ),
       };
     });
@@ -176,15 +186,15 @@ export function MyChart({
           (value) => value.attacker_ff > POSSIBLE_BSS_MAX,
         ),
         easy_defends: opponent_scores.filter(
-          (value) => value.defender_ff <= EASY_BSS_MAX,
+          (value) => value.defender_ff >= POSSIBLE_BSS_MAX,
         ),
         possible_defends: opponent_scores.filter(
           (value) =>
-            value.defender_ff <= POSSIBLE_BSS_MAX &&
-            value.defender_ff > EASY_BSS_MAX,
+            value.defender_ff < POSSIBLE_BSS_MAX &&
+            value.defender_ff >= EASY_BSS_MAX,
         ),
         hard_defends: opponent_scores.filter(
-          (value) => value.defender_ff > POSSIBLE_BSS_MAX,
+          (value) => value.defender_ff < EASY_BSS_MAX,
         ),
       };
     });
@@ -197,9 +207,9 @@ export function MyChart({
 
   return (
     <>
-      <Card className="col-span-6">
+      <Card className="col-span-12 lg:col-span-6">
         <CardHeader>
-          <CardTitle>Our targets</CardTitle>
+          <CardTitle>FF as attacker (left)</CardTitle>
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
@@ -214,26 +224,34 @@ export function MyChart({
             <Bar
               dataKey={(value) => value.easy_attacks.length}
               name="Easy"
-              label="Easy attacks"
+              label="Easy targets"
               stackId="attcounts"
-              fill="#666600"
-              onClick={handleClick(setLeftSelected)}
+              fill={EASY_COLOR}
+              onClick={handleClick(setLeftSelected, setLeftNameSelected)}
             />
             <Bar
               name="Possible"
               dataKey={(value) => value.possible_attacks.length}
               label="Possible attacks"
               stackId="attcounts"
-              fill="#ff3300"
-              onClick={handleClick(setLeftSelected)}
+              fill={POSSIBLE_COLOR}
+              onClick={handleClick(setLeftSelected, setLeftNameSelected)}
+            />
+            <Bar
+              name="Impossible"
+              dataKey={(value) => value.hard_attacks.length}
+              label="Impossible attacks"
+              stackId="attcounts"
+              fill={HARD_COLOR}
+              onClick={handleClick(setLeftSelected, setLeftNameSelected)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
         </ChartContainer>
       </Card>
-      <Card className="col-span-6">
+      <Card className="col-span-12 lg:col-span-6">
         <CardHeader>
-          <CardTitle>Enemy targets</CardTitle>
+          <CardTitle>FF as attacker (right)</CardTitle>
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
@@ -250,24 +268,32 @@ export function MyChart({
               name="Easy"
               label="Easy attacks"
               stackId="attcounts"
-              fill="#666600"
-              onClick={handleClick(setRightSelected)}
+              fill={EASY_COLOR}
+              onClick={handleClick(setRightSelected, setRightNameSelected)}
             />
             <Bar
               dataKey={(value) => value.possible_attacks.length}
               name="Possible"
               label="Possible attacks"
               stackId="attcounts"
-              fill="#ff3300"
-              onClick={handleClick(setRightSelected)}
+              fill={POSSIBLE_COLOR}
+              onClick={handleClick(setRightSelected, setRightNameSelected)}
+            />
+            <Bar
+              dataKey={(value) => value.hard_attacks.length}
+              name="Impossible"
+              label="Impossible attacks"
+              stackId="attcounts"
+              fill={HARD_COLOR}
+              onClick={handleClick(setRightSelected, setRightNameSelected)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
         </ChartContainer>
       </Card>
-      <Card className="col-span-6">
+      <Card className="col-span-12 lg:col-span-6">
         <CardHeader>
-          <CardTitle>Our defenders</CardTitle>
+          <CardTitle>FF as defender (left)</CardTitle>
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
@@ -280,28 +306,36 @@ export function MyChart({
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
             <Bar
-              dataKey={(value) => value.hard_defends.length}
-              name="Hard"
-              label="Hard defends"
+              dataKey={(value) => value.easy_defends.length}
+              name="Easy"
+              label="Easy defends"
               stackId="defcounts"
-              fill="#006666"
-              onClick={handleClick(setLeftSelected)}
+              fill={EASY_COLOR}
+              onClick={handleClick(setLeftSelected, setLeftNameSelected)}
             />
             <Bar
               dataKey={(value) => value.possible_defends.length}
               name="Possible"
               label="Possible defends"
               stackId="defcounts"
-              fill="#0033ff"
-              onClick={handleClick(setLeftSelected)}
+              fill={POSSIBLE_COLOR}
+              onClick={handleClick(setLeftSelected, setLeftNameSelected)}
+            />
+            <Bar
+              dataKey={(value) => value.hard_defends.length}
+              name="Impossible"
+              label="Impossible defends"
+              stackId="defcounts"
+              fill={HARD_COLOR}
+              onClick={handleClick(setLeftSelected, setLeftNameSelected)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
         </ChartContainer>
       </Card>
-      <Card className="col-span-6">
+      <Card className="col-span-12 lg:col-span-6">
         <CardHeader>
-          <CardTitle>Enemy defenders</CardTitle>
+          <CardTitle>FF as defender (right)</CardTitle>
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
@@ -314,28 +348,36 @@ export function MyChart({
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
             <Bar
-              dataKey={(value) => value.hard_defends.length}
-              name="Hard"
-              label="Hard defends"
+              dataKey={(value) => value.easy_defends.length}
+              name="Easy"
+              label="Easy defends"
               stackId="defcounts"
-              fill="#006666"
-              onClick={handleClick(setRightSelected)}
+              fill={EASY_COLOR}
+              onClick={handleClick(setRightSelected, setRightNameSelected)}
             />
             <Bar
               dataKey={(value) => value.possible_defends.length}
               name="Possible"
               label="Possible defends"
               stackId="defcounts"
-              fill="#0033ff"
-              onClick={handleClick(setRightSelected)}
+              fill={POSSIBLE_COLOR}
+              onClick={handleClick(setRightSelected, setRightNameSelected)}
+            />
+            <Bar
+              dataKey={(value) => value.hard_defends.length}
+              name="Impossible"
+              label="Impossible defends"
+              stackId="defcounts"
+              fill={HARD_COLOR}
+              onClick={handleClick(setRightSelected, setRightNameSelected)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
         </ChartContainer>
       </Card>
-      <Card className="col-span-6">
+      <Card className="col-span-12 lg:col-span-6">
         <CardHeader>
-          <CardTitle>Us attacking</CardTitle>
+          <CardTitle>FF as attacker ({leftNameSelected})</CardTitle>
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
@@ -363,16 +405,16 @@ export function MyChart({
               xAxisId="name"
               yAxisId="attacker"
               dataKey="attacker_ff"
-              name="Target"
+              name={"FF of " + leftNameSelected}
               fill="#666600"
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
         </ChartContainer>
       </Card>
-      <Card className="col-span-6">
+      <Card className="col-span-12 lg:col-span-6">
         <CardHeader>
-          <CardTitle>Us defending</CardTitle>
+          <CardTitle>FF as defender ({leftNameSelected})</CardTitle>
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
@@ -400,23 +442,30 @@ export function MyChart({
               xAxisId="name"
               yAxisId="defender"
               dataKey="defender_ff"
-              name="Defense"
+              name="FF of attacker"
               fill="#006666"
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
         </ChartContainer>
       </Card>
-      <Card className="col-span-6">
+      <Card className="col-span-12 lg:col-span-6">
         <CardHeader>
-          <CardTitle>Them attacking</CardTitle>
+          <CardTitle>FF as attacker ({rightNameSelected})</CardTitle>
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
             data={rightSelected}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
           >
-            <XAxis xAxisId="name" label="name" dataKey="name" />
+            <XAxis
+              xAxisId="name"
+              label="name"
+              dataKey="name"
+              angle={-45}
+              textAnchor="end"
+              interval={1}
+            />
             <YAxis
               yAxisId="attacker"
               domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
@@ -429,7 +478,7 @@ export function MyChart({
             <Bar
               xAxisId="name"
               yAxisId="attacker"
-              name="Target"
+              name={"FF of " + rightNameSelected}
               dataKey="attacker_ff"
               fill="#666600"
             />
@@ -437,16 +486,23 @@ export function MyChart({
           </ComposedChart>
         </ChartContainer>
       </Card>
-      <Card className="col-span-6">
+      <Card className="col-span-12 lg:col-span-6">
         <CardHeader>
-          <CardTitle>Them defending</CardTitle>
+          <CardTitle>FF as defender ({rightNameSelected})</CardTitle>
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
             data={rightSelected}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
           >
-            <XAxis xAxisId="name" label="name" dataKey="name" />
+            <XAxis
+              xAxisId="name"
+              label="name"
+              dataKey="name"
+              angle={-45}
+              textAnchor="end"
+              interval={1}
+            />
             <YAxis
               yAxisId="defender"
               domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
@@ -460,7 +516,7 @@ export function MyChart({
               xAxisId="name"
               yAxisId="defender"
               dataKey="defender_ff"
-              name="Defense"
+              name="FF of attacker"
               fill="#006666"
             />
             <ChartTooltip content={<ChartTooltipContent />} />
