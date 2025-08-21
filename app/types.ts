@@ -56,8 +56,8 @@ export interface FFScouter {
 export interface DrillDownData {
   name: string;
   id: string;
-  attacker_ff: number;
-  defender_ff: number;
+  attacker_ff: number | null;
+  defender_ff: number | null;
   easy_attack: number;
   possible_attack: number;
   hard_attack: number;

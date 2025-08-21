@@ -86,20 +86,34 @@ export function MyChart({
         id: value.id,
         attacker_ff: value.attacker_ff,
         defender_ff: value.defender_ff,
-        easy_attack: value.attacker_ff <= EASY_BSS_MAX ? 1 : 0,
+        easy_attack:
+          value.attacker_ff != null && value.attacker_ff <= EASY_BSS_MAX
+            ? 1
+            : 0,
         possible_attack:
+          value.attacker_ff != null &&
           value.attacker_ff <= POSSIBLE_BSS_MAX &&
           value.attacker_ff > EASY_BSS_MAX
             ? 1
             : 0,
-        hard_attack: value.attacker_ff > POSSIBLE_BSS_MAX ? 1 : 0,
-        easy_defend: value.defender_ff <= EASY_BSS_MAX ? 1 : 0,
+        hard_attack:
+          value.attacker_ff != null && value.attacker_ff > POSSIBLE_BSS_MAX
+            ? 1
+            : 0,
+        easy_defend:
+          value.defender_ff != null && value.defender_ff <= EASY_BSS_MAX
+            ? 1
+            : 0,
         possible_defend:
+          value.defender_ff != null &&
           value.defender_ff <= POSSIBLE_BSS_MAX &&
           value.defender_ff > EASY_BSS_MAX
             ? 1
             : 0,
-        hard_defend: value.defender_ff > POSSIBLE_BSS_MAX ? 1 : 0,
+        hard_defend:
+          value.defender_ff != null && value.defender_ff > POSSIBLE_BSS_MAX
+            ? 1
+            : 0,
       };
     });
   }
