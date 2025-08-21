@@ -22,6 +22,7 @@ import {
   FFScouterResult,
   GraphData,
   TornMemberApi,
+  FFScouterJson,
 } from "./types";
 
 const EASY_BSS_MAX = 2.5;
@@ -109,13 +110,21 @@ export function MyChart({
     leftfactiondata: TornFactionBasicApi,
     rightfactiondata: TornFactionBasicApi,
   ) {
+    const sort_function = (a: FFScouterJson, b: FFScouterJson) => {
+      if (a.bss_public == null && b.bss_public == null) {
+        return 0;
+      }
+      if (a.bss_public == null) {
+        return -1;
+      }
+      if (b.bss_public == null) {
+        return 1;
+      }
+      return a.bss_public - b.bss_public;
+    };
     // factions sorted by lower BSS to highest
-    const sorted_left = leftffscouterdata.toSorted(
-      (a, b) => a.bss_public - b.bss_public,
-    );
-    const sorted_right = rightffscouterdata.toSorted(
-      (a, b) => a.bss_public - b.bss_public,
-    );
+    const sorted_left = leftffscouterdata.toSorted(sort_function);
+    const sorted_right = rightffscouterdata.toSorted(sort_function);
 
     const left_data: GraphData[] = sorted_left.map((value) => {
       const member: TornMemberApi =
@@ -134,26 +143,32 @@ export function MyChart({
         opponent_scores: opponent_scores,
         bss_public: value.bss_public,
         easy_attacks: opponent_scores.filter(
-          (value) => value.attacker_ff <= EASY_BSS_MAX,
+          (value) =>
+            value.attacker_ff != null && value.attacker_ff <= EASY_BSS_MAX,
         ),
         possible_attacks: opponent_scores.filter(
           (value) =>
+            value.attacker_ff != null &&
             value.attacker_ff <= POSSIBLE_BSS_MAX &&
             value.attacker_ff > EASY_BSS_MAX,
         ),
         hard_attacks: opponent_scores.filter(
-          (value) => value.attacker_ff > POSSIBLE_BSS_MAX,
+          (value) =>
+            value.attacker_ff != null && value.attacker_ff > POSSIBLE_BSS_MAX,
         ),
         easy_defends: opponent_scores.filter(
-          (value) => value.defender_ff >= POSSIBLE_BSS_MAX,
+          (value) =>
+            value.defender_ff != null && value.defender_ff >= POSSIBLE_BSS_MAX,
         ),
         possible_defends: opponent_scores.filter(
           (value) =>
+            value.defender_ff != null &&
             value.defender_ff < POSSIBLE_BSS_MAX &&
             value.defender_ff >= EASY_BSS_MAX,
         ),
         hard_defends: opponent_scores.filter(
-          (value) => value.defender_ff < EASY_BSS_MAX,
+          (value) =>
+            value.defender_ff != null && value.defender_ff < EASY_BSS_MAX,
         ),
       };
     });
@@ -175,26 +190,32 @@ export function MyChart({
         opponent_scores: opponent_scores,
         bss_public: value.bss_public,
         easy_attacks: opponent_scores.filter(
-          (value) => value.attacker_ff <= EASY_BSS_MAX,
+          (value) =>
+            value.attacker_ff != null && value.attacker_ff <= EASY_BSS_MAX,
         ),
         possible_attacks: opponent_scores.filter(
           (value) =>
+            value.attacker_ff != null &&
             value.attacker_ff <= POSSIBLE_BSS_MAX &&
             value.attacker_ff > EASY_BSS_MAX,
         ),
         hard_attacks: opponent_scores.filter(
-          (value) => value.attacker_ff > POSSIBLE_BSS_MAX,
+          (value) =>
+            value.attacker_ff != null && value.attacker_ff > POSSIBLE_BSS_MAX,
         ),
         easy_defends: opponent_scores.filter(
-          (value) => value.defender_ff >= POSSIBLE_BSS_MAX,
+          (value) =>
+            value.defender_ff != null && value.defender_ff >= POSSIBLE_BSS_MAX,
         ),
         possible_defends: opponent_scores.filter(
           (value) =>
+            value.defender_ff != null &&
             value.defender_ff < POSSIBLE_BSS_MAX &&
             value.defender_ff >= EASY_BSS_MAX,
         ),
         hard_defends: opponent_scores.filter(
-          (value) => value.defender_ff < EASY_BSS_MAX,
+          (value) =>
+            value.defender_ff != null && value.defender_ff < EASY_BSS_MAX,
         ),
       };
     });
@@ -396,7 +417,6 @@ export function MyChart({
               yAxisId="attacker"
               domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
               allowDataOverflow
-              orientation="right"
             />
             <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Legend verticalAlign="top" />
@@ -433,7 +453,6 @@ export function MyChart({
               yAxisId="defender"
               domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
               allowDataOverflow
-              orientation="left"
             />
             <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Legend verticalAlign="top" />
@@ -470,7 +489,6 @@ export function MyChart({
               yAxisId="attacker"
               domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
               allowDataOverflow
-              orientation="right"
             />
             <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Legend verticalAlign="top" />
@@ -507,7 +525,6 @@ export function MyChart({
               yAxisId="defender"
               domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
               allowDataOverflow
-              orientation="left"
             />
             <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Legend verticalAlign="top" />

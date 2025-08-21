@@ -6,32 +6,37 @@ export type factionIds = { leftFactionId: string; rightFactionId: string };
 export class FairFightScore {
   name: string;
   id: string;
-  attacker_ff: number;
-  defender_ff: number;
+  attacker_ff: number | null;
+  defender_ff: number | null;
   constructor(
     name: string,
     id: string,
-    battle_score: number,
-    opponent_battle_score: number,
+    battle_score: number | null,
+    opponent_battle_score: number | null,
   ) {
     this.name = name;
     this.id = id;
-    this.attacker_ff =
-      Math.trunc(1 + (8 / 3) * (opponent_battle_score / battle_score) * 100) /
-      100;
-    this.defender_ff =
-      Math.trunc(1 + (8 / 3) * (battle_score / opponent_battle_score) * 100) /
-      100;
+    if (battle_score == null || opponent_battle_score == null) {
+      this.attacker_ff = null;
+      this.defender_ff = null;
+    } else {
+      this.attacker_ff =
+        Math.trunc(1 + (8 / 3) * (opponent_battle_score / battle_score) * 100) /
+        100;
+      this.defender_ff =
+        Math.trunc(1 + (8 / 3) * (battle_score / opponent_battle_score) * 100) /
+        100;
+    }
   }
 }
 
 export const FFScouterJson = z.object({
   player_id: z.number(),
-  fair_fight: z.number(),
-  bs_estimate: z.number(),
-  bs_estimate_human: z.string(),
-  bss_public: z.number(),
-  last_updated: z.number(),
+  fair_fight: z.nullable(z.number()),
+  bs_estimate: z.nullable(z.number()),
+  bs_estimate_human: z.nullable(z.string()),
+  bss_public: z.nullable(z.number()),
+  last_updated: z.nullable(z.number()),
 });
 
 export type FFScouterJson = z.infer<typeof FFScouterJson>;
@@ -64,7 +69,7 @@ export interface DrillDownData {
 export interface GraphData {
   name: string;
   opponent_scores: FairFightScore[];
-  bss_public: number;
+  bss_public: number | null;
   easy_attacks: FairFightScore[];
   possible_attacks: FairFightScore[];
   hard_attacks: FairFightScore[];

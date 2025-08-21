@@ -84,6 +84,10 @@ export default function SPA() {
   const reset = () => {
     localStorage.removeItem("factionIds");
     setFactionIds(undefined);
+    setLeftFFScouterData(undefined);
+    setRightFFScouterData(undefined);
+    setLeftFactionBasic(undefined);
+    setRightFactionBasic(undefined);
   };
 
   useEffect(() => {
