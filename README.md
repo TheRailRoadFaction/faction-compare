@@ -45,3 +45,4 @@ Things I want to add
 - Dark mode
 - Test on mobile
 - Deploy as github page
+- Turn the bar charts into area charts, they're way cooler but onClick doesn't work the same way
