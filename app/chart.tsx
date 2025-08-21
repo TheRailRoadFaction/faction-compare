@@ -250,6 +250,7 @@ export function MyChart({
           <ComposedChart
             data={left_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+            barCategoryGap={-1}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
             <YAxis label="count" domain={[0, max_yaxis]} />
@@ -292,6 +293,7 @@ export function MyChart({
           <ComposedChart
             data={right_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+            barCategoryGap={-1}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
             <YAxis label="count" domain={[0, max_yaxis]} />
@@ -334,6 +336,7 @@ export function MyChart({
           <ComposedChart
             data={left_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+            barCategoryGap={-1}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
             <YAxis label="count" domain={[0, max_yaxis]} />
@@ -376,6 +379,7 @@ export function MyChart({
           <ComposedChart
             data={right_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+            barCategoryGap={-1}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
             <YAxis label="count" domain={[0, max_yaxis]} />
@@ -418,6 +422,7 @@ export function MyChart({
           <ComposedChart
             data={leftSelected}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+            barCategoryGap={-1}
           >
             <XAxis
               xAxisId="name"
@@ -454,6 +459,7 @@ export function MyChart({
           <ComposedChart
             data={leftSelected}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+            barCategoryGap={-1}
           >
             <XAxis
               xAxisId="name"
@@ -490,6 +496,7 @@ export function MyChart({
           <ComposedChart
             data={rightSelected}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+            barCategoryGap={-1}
           >
             <XAxis
               xAxisId="name"
@@ -526,6 +533,7 @@ export function MyChart({
           <ComposedChart
             data={rightSelected}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+            barCategoryGap={-1}
           >
             <XAxis
               xAxisId="name"
