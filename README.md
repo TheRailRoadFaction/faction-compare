@@ -34,3 +34,14 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+# TODO
+
+Things I want to add
+
+- Add a count of members above and below a person in the tooltip
+- Add a box around the other faction's lines showing who the 4.0-2.5 targets are
+- Make the ranges configurable with fields
+- Dark mode
+- Test on mobile
+- Deploy as github page
