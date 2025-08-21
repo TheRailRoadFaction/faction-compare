@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { LoginForm } from "./login-form";
-import { FFScouter, keys } from "./types";
+import { FFScouterResult, keys, TornFactionBasicApi } from "./types";
 import { Loader } from "lucide-react";
 import { MyChart } from "./chart";
 
@@ -31,11 +31,14 @@ const getKeys = (): keys | undefined => {
 export default function SPA() {
   const [keys, setKeys] = useState<keys>();
   const [loading, setLoading] = useState(true);
-  const [enemyData, setEnemyData] = useState<FFScouter[]>();
+  const [rightFFScouterData, setRightFFScouterData] =
+    useState<FFScouterResult>();
   //make sure to pass types here just as above
-  const [ourData, setOurData] = useState();
-  const [ourFactionBasic, setOurFactionBasic] = useState();
-  const [enemyFactionBasic, setEnemyFactionBasic] = useState();
+  const [leftFFScouterData, setLeftFFScouterData] = useState<FFScouterResult>();
+  const [leftFactionBasic, setLeftFactionBasic] =
+    useState<TornFactionBasicApi>();
+  const [rightFactionBasic, setRightFactionBasic] =
+    useState<TornFactionBasicApi>();
 
   //we need this because it should run after each time the component updates, or in this case, when window gets mounted.
   //thats the cleanest way of doing things i think
@@ -44,13 +47,55 @@ export default function SPA() {
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    if (!keys) {
+      return;
+    }
+    const queryString = new URLSearchParams({
+      selections: "basic",
+      key: keys.publicKey,
+    });
+    fetch("https://api.torn.com/faction/37498?" + queryString.toString())
+      .then((res) => res.json())
+      .then((value) => TornFactionBasicApi.parse(value))
+      .then((value: TornFactionBasicApi) => setLeftFactionBasic(value));
+
+    fetch("https://api.torn.com/faction/44040?" + queryString.toString())
+      .then((res) => res.json())
+      .then((value) => TornFactionBasicApi.parse(value))
+      .then((value: TornFactionBasicApi) => setRightFactionBasic(value));
+  }, [keys]);
+
   //run this every time keys changes
   useEffect(() => {
+    if (!keys || !leftFactionBasic) {
+      return;
+    }
     //expand for every api call
-    fetch("url")
+    const query = new URLSearchParams({
+      key: keys.ffScouterKey,
+      targets: Object.keys(leftFactionBasic.members).join(","),
+    });
+    fetch("https://ffscouter.com/api/v1/get-stats?" + query.toString())
       .then((res) => res.json())
-      .then((value: FFScouter[]) => setEnemyData(value));
-  }, [keys]);
+      .then((value) => FFScouterResult.parse(value))
+      .then((value: FFScouterResult) => setLeftFFScouterData(value));
+  }, [keys, leftFactionBasic]);
+
+  useEffect(() => {
+    if (!keys || !rightFactionBasic) {
+      return;
+    }
+    //expand for every api call
+    const query = new URLSearchParams({
+      key: keys.ffScouterKey,
+      targets: Object.keys(rightFactionBasic.members).join(","),
+    });
+    fetch("https://ffscouter.com/api/v1/get-stats?" + query.toString())
+      .then((res) => res.json())
+      .then((value) => FFScouterResult.parse(value))
+      .then((value: FFScouterResult) => setRightFFScouterData(value));
+  }, [keys, rightFactionBasic]);
 
   if (loading) {
     return (
@@ -68,7 +113,12 @@ export default function SPA() {
     );
   }
   //expand for every prop passed.
-  if(!enemyData){
+  if (
+    !leftFactionBasic ||
+    !rightFactionBasic ||
+    !rightFFScouterData ||
+    !leftFFScouterData
+  ) {
     return (
       <div className="container mx-auto grow flex items-center">
         <Loader className="animate-spin w-full"></Loader>
@@ -76,12 +126,18 @@ export default function SPA() {
     );
   }
 
-  //expand all props using state here
+  console.log("I got here!");
+
   return (
     <div className="grid grid-cols-12 gap-10 m-10">
       <p className="col-span-12">{JSON.stringify(keys)}</p>
 
-      <MyChart enemydata={enemyData} ourdata={[]} ourfactionbasic={} enemyfactionbasic={}/>
+      <MyChart
+        leftffscouterdata={leftFFScouterData}
+        rightffscouterdata={rightFFScouterData}
+        leftfactionbasic={leftFactionBasic}
+        rightfactionbasic={rightFactionBasic}
+      />
     </div>
   );
 }

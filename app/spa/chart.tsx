@@ -17,11 +17,11 @@ import {
 } from "recharts";
 import {
   DrillDownData,
-  FactionData,
+  TornFactionBasicApi,
   FairFightScore,
-  FFScouter,
+  FFScouterResult,
   GraphData,
-  Member,
+  TornMemberApi,
 } from "./types";
 
 const EASY_BSS_MAX = 2.5;
@@ -39,23 +39,28 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 interface ChartInterface {
-  ourdata: FFScouter[];
-  enemydata: FFScouter[];
-  ourfactionbasic: FactionData;
-  enemyfactionbasic: FactionData;
+  leftffscouterdata: FFScouterResult;
+  rightffscouterdata: FFScouterResult;
+  leftfactionbasic: TornFactionBasicApi;
+  rightfactionbasic: TornFactionBasicApi;
 }
 
 export function MyChart({
-  ourdata,
-  enemydata,
-  ourfactionbasic,
-  enemyfactionbasic,
+  leftffscouterdata,
+  rightffscouterdata,
+  leftfactionbasic,
+  rightfactionbasic,
 }: ChartInterface) {
-  const { our_data, enemy_data } = massage_data();
-  const max_yaxis = Math.max(our_data.length, enemy_data.length);
+  const { left_data, right_data } = massage_data(
+    leftffscouterdata,
+    rightffscouterdata,
+    leftfactionbasic,
+    rightfactionbasic,
+  );
+  const max_yaxis = Math.max(left_data.length, right_data.length);
 
-  const [ourSelected, setOurSelected] = useState<DrillDownData[]>([]);
-  const [enemySelected, setEnemySelected] = useState<DrillDownData[]>([]);
+  const [leftSelected, setLeftSelected] = useState<DrillDownData[]>([]);
+  const [rightSelected, setRightSelected] = useState<DrillDownData[]>([]);
 
   function handleClick(setter: Dispatch<SetStateAction<DrillDownData[]>>) {
     return function (data: GraphData) {
@@ -88,97 +93,106 @@ export function MyChart({
     });
   }
 
-  function massage_data() {
+  function massage_data(
+    leftffscouterdata: FFScouterResult,
+    rightffscouterdata: FFScouterResult,
+    leftfactiondata: TornFactionBasicApi,
+    rightfactiondata: TornFactionBasicApi,
+  ) {
     // factions sorted by lower BSS to highest
-    const sorted_ours = ourdata.toSorted((a, b) => a.bss_public - b.bss_public);
-    const sorted_enemy = enemydata.toSorted(
-      (a, b) => a.bss_public - b.bss_public
+    const sorted_left = leftffscouterdata.toSorted(
+      (a, b) => a.bss_public - b.bss_public,
+    );
+    const sorted_right = rightffscouterdata.toSorted(
+      (a, b) => a.bss_public - b.bss_public,
     );
 
-    const our_data: GraphData[] = sorted_ours.map((value) => {
-      const member: Member = ourfactionbasic.members["" + value.player_id];
-      const opponent_scores = sorted_enemy.map(
+    const left_data: GraphData[] = sorted_left.map((value) => {
+      const member: TornMemberApi =
+        leftfactiondata.members["" + value.player_id];
+      const opponent_scores = sorted_right.map(
         (enemy) =>
           new FairFightScore(
-            enemyfactionbasic.members["" + enemy.player_id].name,
+            rightfactionbasic.members["" + enemy.player_id].name,
             "" + enemy.player_id,
             value.bss_public,
-            enemy.bss_public
-          )
+            enemy.bss_public,
+          ),
       );
       return {
         name: member?.name ?? "Unknown",
         opponent_scores: opponent_scores,
         bss_public: value.bss_public,
         easy_attacks: opponent_scores.filter(
-          (value) => value.attacker_ff <= EASY_BSS_MAX
+          (value) => value.attacker_ff <= EASY_BSS_MAX,
         ),
         possible_attacks: opponent_scores.filter(
           (value) =>
             value.attacker_ff <= POSSIBLE_BSS_MAX &&
-            value.attacker_ff > EASY_BSS_MAX
+            value.attacker_ff > EASY_BSS_MAX,
         ),
         hard_attacks: opponent_scores.filter(
-          (value) => value.attacker_ff > POSSIBLE_BSS_MAX
+          (value) => value.attacker_ff > POSSIBLE_BSS_MAX,
         ),
         easy_defends: opponent_scores.filter(
-          (value) => value.defender_ff <= EASY_BSS_MAX
+          (value) => value.defender_ff <= EASY_BSS_MAX,
         ),
         possible_defends: opponent_scores.filter(
           (value) =>
             value.defender_ff <= POSSIBLE_BSS_MAX &&
-            value.defender_ff > EASY_BSS_MAX
+            value.defender_ff > EASY_BSS_MAX,
         ),
         hard_defends: opponent_scores.filter(
-          (value) => value.defender_ff > POSSIBLE_BSS_MAX
+          (value) => value.defender_ff > POSSIBLE_BSS_MAX,
         ),
       };
     });
 
-    const enemy_data: GraphData[] = sorted_enemy.map((value) => {
-      const member: Member = enemyfactionbasic.members["" + value.player_id];
-      const opponent_scores = sorted_ours.map(
+    const right_data: GraphData[] = sorted_right.map((value) => {
+      const member: TornMemberApi =
+        rightfactiondata.members["" + value.player_id];
+      const opponent_scores = sorted_left.map(
         (ours) =>
           new FairFightScore(
-            ourfactionbasic.members["" + ours.player_id].name,
+            leftfactionbasic.members["" + ours.player_id].name,
             "" + ours.player_id,
             value.bss_public,
-            ours.bss_public
-          )
+            ours.bss_public,
+          ),
       );
       return {
         name: member?.name ?? "Unknown",
         opponent_scores: opponent_scores,
         bss_public: value.bss_public,
         easy_attacks: opponent_scores.filter(
-          (value) => value.attacker_ff <= EASY_BSS_MAX
+          (value) => value.attacker_ff <= EASY_BSS_MAX,
         ),
         possible_attacks: opponent_scores.filter(
           (value) =>
             value.attacker_ff <= POSSIBLE_BSS_MAX &&
-            value.attacker_ff > EASY_BSS_MAX
+            value.attacker_ff > EASY_BSS_MAX,
         ),
         hard_attacks: opponent_scores.filter(
-          (value) => value.attacker_ff > POSSIBLE_BSS_MAX
+          (value) => value.attacker_ff > POSSIBLE_BSS_MAX,
         ),
         easy_defends: opponent_scores.filter(
-          (value) => value.defender_ff <= EASY_BSS_MAX
+          (value) => value.defender_ff <= EASY_BSS_MAX,
         ),
         possible_defends: opponent_scores.filter(
           (value) =>
             value.defender_ff <= POSSIBLE_BSS_MAX &&
-            value.defender_ff > EASY_BSS_MAX
+            value.defender_ff > EASY_BSS_MAX,
         ),
         hard_defends: opponent_scores.filter(
-          (value) => value.defender_ff > POSSIBLE_BSS_MAX
+          (value) => value.defender_ff > POSSIBLE_BSS_MAX,
         ),
       };
     });
 
-    console.log(our_data);
-    console.log(enemy_data);
+    console.log(left_data);
+    console.log(right_data);
 
-    return { our_data: our_data, enemy_data: enemy_data };
+    return { left_data: left_data, right_data: right_data };
   }
 
   return (
@@ -189,7 +203,7 @@ export function MyChart({
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
-            data={our_data}
+            data={left_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
@@ -203,7 +217,7 @@ export function MyChart({
               label="Easy attacks"
               stackId="attcounts"
               fill="#666600"
-              onClick={handleClick(setOurSelected)}
+              onClick={handleClick(setLeftSelected)}
             />
             <Bar
               name="Possible"
@@ -211,7 +225,7 @@ export function MyChart({
               label="Possible attacks"
               stackId="attcounts"
               fill="#ff3300"
-              onClick={handleClick(setOurSelected)}
+              onClick={handleClick(setLeftSelected)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -223,7 +237,7 @@ export function MyChart({
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
-            data={enemy_data}
+            data={right_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
@@ -237,7 +251,7 @@ export function MyChart({
               label="Easy attacks"
               stackId="attcounts"
               fill="#666600"
-              onClick={handleClick(setEnemySelected)}
+              onClick={handleClick(setRightSelected)}
             />
             <Bar
               dataKey={(value) => value.possible_attacks.length}
@@ -245,7 +259,7 @@ export function MyChart({
               label="Possible attacks"
               stackId="attcounts"
               fill="#ff3300"
-              onClick={handleClick(setEnemySelected)}
+              onClick={handleClick(setRightSelected)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -257,7 +271,7 @@ export function MyChart({
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
-            data={our_data}
+            data={left_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
@@ -271,7 +285,7 @@ export function MyChart({
               label="Hard defends"
               stackId="defcounts"
               fill="#006666"
-              onClick={handleClick(setOurSelected)}
+              onClick={handleClick(setLeftSelected)}
             />
             <Bar
               dataKey={(value) => value.possible_defends.length}
@@ -279,7 +293,7 @@ export function MyChart({
               label="Possible defends"
               stackId="defcounts"
               fill="#0033ff"
-              onClick={handleClick(setOurSelected)}
+              onClick={handleClick(setLeftSelected)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -291,7 +305,7 @@ export function MyChart({
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
-            data={enemy_data}
+            data={right_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
@@ -305,7 +319,7 @@ export function MyChart({
               label="Hard defends"
               stackId="defcounts"
               fill="#006666"
-              onClick={handleClick(setEnemySelected)}
+              onClick={handleClick(setRightSelected)}
             />
             <Bar
               dataKey={(value) => value.possible_defends.length}
@@ -313,7 +327,7 @@ export function MyChart({
               label="Possible defends"
               stackId="defcounts"
               fill="#0033ff"
-              onClick={handleClick(setEnemySelected)}
+              onClick={handleClick(setRightSelected)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -325,7 +339,7 @@ export function MyChart({
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
-            data={ourSelected}
+            data={leftSelected}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
           >
             <XAxis
@@ -362,7 +376,7 @@ export function MyChart({
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
-            data={ourSelected}
+            data={leftSelected}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
           >
             <XAxis
@@ -399,7 +413,7 @@ export function MyChart({
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
-            data={enemySelected}
+            data={rightSelected}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
           >
             <XAxis xAxisId="name" label="name" dataKey="name" />
@@ -429,7 +443,7 @@ export function MyChart({
         </CardHeader>
         <ChartContainer config={chartConfig}>
           <ComposedChart
-            data={enemySelected}
+            data={rightSelected}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
           >
             <XAxis xAxisId="name" label="name" dataKey="name" />
