@@ -11,7 +11,6 @@ import {
   CartesianGrid,
   ComposedChart,
   Legend,
-  Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
@@ -254,7 +253,6 @@ export function MyChart({
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
             <YAxis label="count" domain={[0, max_yaxis]} />
-            <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
             <Bar
@@ -297,7 +295,6 @@ export function MyChart({
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
             <YAxis label="count" domain={[0, max_yaxis]} />
-            <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
             <Bar
@@ -340,7 +337,6 @@ export function MyChart({
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
             <YAxis label="count" domain={[0, max_yaxis]} />
-            <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
             <Bar
@@ -383,7 +379,6 @@ export function MyChart({
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
             <YAxis label="count" domain={[0, max_yaxis]} />
-            <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
             <Bar
@@ -437,7 +432,6 @@ export function MyChart({
               domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
               allowDataOverflow
             />
-            <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
             <Bar
@@ -474,7 +468,6 @@ export function MyChart({
               domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
               allowDataOverflow
             />
-            <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
             <Bar
@@ -511,7 +504,6 @@ export function MyChart({
               domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
               allowDataOverflow
             />
-            <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
             <Bar
@@ -548,7 +540,6 @@ export function MyChart({
               domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
               allowDataOverflow
             />
-            <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
             <Bar
