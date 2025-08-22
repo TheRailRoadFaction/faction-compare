@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/chart";
 import { useState, Dispatch, SetStateAction } from "react";
 import {
+  Area,
   Bar,
   CartesianGrid,
   ComposedChart,
@@ -23,6 +24,7 @@ import {
   TornMemberApi,
   FFScouterJson,
 } from "./types";
+import { CategoricalChartState } from "recharts/types/chart/types";
 
 const EASY_BSS_MAX = 2.5;
 const POSSIBLE_BSS_MAX = 4.0;
@@ -72,9 +74,12 @@ export function MyChart({
     setter: Dispatch<SetStateAction<DrillDownData[]>>,
     nameSetter: Dispatch<SetStateAction<string>>,
   ) {
-    return function (data: GraphData) {
-      setter(massage_graph_data(data));
-      nameSetter(data.name);
+    return function (nextState: CategoricalChartState) {
+      if (!nextState.activePayload || !nextState.activePayload[0]) {
+        return;
+      }
+      setter(massage_graph_data(nextState.activePayload[0].payload));
+      nameSetter(nextState.activePayload[0].payload.name);
     };
   }
 
@@ -153,6 +158,7 @@ export function MyChart({
       );
       return {
         name: member?.name ?? "Unknown",
+        id: value.player_id,
         opponent_scores: opponent_scores,
         bss_public: value.bss_public,
         easy_attacks: opponent_scores.filter(
@@ -250,34 +256,32 @@ export function MyChart({
             data={left_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
             barCategoryGap={-1}
+            onClick={handleClick(setLeftSelected, setLeftNameSelected)}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
             <YAxis label="count" domain={[0, max_yaxis]} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
-            <Bar
+            <Area
               dataKey={(value) => value.easy_attacks.length}
               name="Easy"
               label="Easy targets"
               stackId="attcounts"
               fill={EASY_COLOR}
-              onClick={handleClick(setLeftSelected, setLeftNameSelected)}
             />
-            <Bar
+            <Area
               name="Possible"
               dataKey={(value) => value.possible_attacks.length}
               label="Possible attacks"
               stackId="attcounts"
               fill={POSSIBLE_COLOR}
-              onClick={handleClick(setLeftSelected, setLeftNameSelected)}
             />
-            <Bar
+            <Area
               name="Impossible"
               dataKey={(value) => value.hard_attacks.length}
               label="Impossible attacks"
               stackId="attcounts"
               fill={HARD_COLOR}
-              onClick={handleClick(setLeftSelected, setLeftNameSelected)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -292,34 +296,32 @@ export function MyChart({
             data={right_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
             barCategoryGap={-1}
+            onClick={handleClick(setRightSelected, setRightNameSelected)}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
             <YAxis label="count" domain={[0, max_yaxis]} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
-            <Bar
+            <Area
               dataKey={(value) => value.easy_attacks.length}
               name="Easy"
               label="Easy attacks"
               stackId="attcounts"
               fill={EASY_COLOR}
-              onClick={handleClick(setRightSelected, setRightNameSelected)}
             />
-            <Bar
+            <Area
               dataKey={(value) => value.possible_attacks.length}
               name="Possible"
               label="Possible attacks"
               stackId="attcounts"
               fill={POSSIBLE_COLOR}
-              onClick={handleClick(setRightSelected, setRightNameSelected)}
             />
-            <Bar
+            <Area
               dataKey={(value) => value.hard_attacks.length}
               name="Impossible"
               label="Impossible attacks"
               stackId="attcounts"
               fill={HARD_COLOR}
-              onClick={handleClick(setRightSelected, setRightNameSelected)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -334,34 +336,32 @@ export function MyChart({
             data={left_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
             barCategoryGap={-1}
+            onClick={handleClick(setLeftSelected, setLeftNameSelected)}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
             <YAxis label="count" domain={[0, max_yaxis]} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
-            <Bar
+            <Area
               dataKey={(value) => value.easy_defends.length}
               name="Easy"
               label="Easy defends"
               stackId="defcounts"
               fill={EASY_COLOR}
-              onClick={handleClick(setLeftSelected, setLeftNameSelected)}
             />
-            <Bar
+            <Area
               dataKey={(value) => value.possible_defends.length}
               name="Possible"
               label="Possible defends"
               stackId="defcounts"
               fill={POSSIBLE_COLOR}
-              onClick={handleClick(setLeftSelected, setLeftNameSelected)}
             />
-            <Bar
+            <Area
               dataKey={(value) => value.hard_defends.length}
               name="Impossible"
               label="Impossible defends"
               stackId="defcounts"
               fill={HARD_COLOR}
-              onClick={handleClick(setLeftSelected, setLeftNameSelected)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -376,34 +376,32 @@ export function MyChart({
             data={right_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
             barCategoryGap={-1}
+            onClick={handleClick(setRightSelected, setRightNameSelected)}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
             <YAxis label="count" domain={[0, max_yaxis]} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
-            <Bar
+            <Area
               dataKey={(value) => value.easy_defends.length}
               name="Easy"
               label="Easy defends"
               stackId="defcounts"
               fill={EASY_COLOR}
-              onClick={handleClick(setRightSelected, setRightNameSelected)}
             />
-            <Bar
+            <Area
               dataKey={(value) => value.possible_defends.length}
               name="Possible"
               label="Possible defends"
               stackId="defcounts"
               fill={POSSIBLE_COLOR}
-              onClick={handleClick(setRightSelected, setRightNameSelected)}
             />
-            <Bar
+            <Area
               dataKey={(value) => value.hard_defends.length}
               name="Impossible"
               label="Impossible defends"
               stackId="defcounts"
               fill={HARD_COLOR}
-              onClick={handleClick(setRightSelected, setRightNameSelected)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -434,7 +432,7 @@ export function MyChart({
             />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
-            <Bar
+            <Area
               xAxisId="name"
               yAxisId="attacker"
               dataKey="attacker_ff"
@@ -470,7 +468,7 @@ export function MyChart({
             />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
-            <Bar
+            <Area
               xAxisId="name"
               yAxisId="defender"
               dataKey="defender_ff"
@@ -506,7 +504,7 @@ export function MyChart({
             />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
-            <Bar
+            <Area
               xAxisId="name"
               yAxisId="attacker"
               name={"FF of " + rightNameSelected}
@@ -542,7 +540,7 @@ export function MyChart({
             />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
-            <Bar
+            <Area
               xAxisId="name"
               yAxisId="defender"
               dataKey="defender_ff"
