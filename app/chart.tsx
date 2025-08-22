@@ -255,7 +255,6 @@ export function MyChart({
           <ComposedChart
             data={left_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-            barCategoryGap={-1}
             onClick={handleClick(setLeftSelected, setLeftNameSelected)}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
@@ -268,6 +267,7 @@ export function MyChart({
               label="Easy targets"
               stackId="attcounts"
               fill={EASY_COLOR}
+              stroke={EASY_COLOR}
             />
             <Area
               name="Possible"
@@ -275,6 +275,7 @@ export function MyChart({
               label="Possible attacks"
               stackId="attcounts"
               fill={POSSIBLE_COLOR}
+              stroke={POSSIBLE_COLOR}
             />
             <Area
               name="Impossible"
@@ -282,6 +283,7 @@ export function MyChart({
               label="Impossible attacks"
               stackId="attcounts"
               fill={HARD_COLOR}
+              stroke={HARD_COLOR}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -295,7 +297,6 @@ export function MyChart({
           <ComposedChart
             data={right_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-            barCategoryGap={-1}
             onClick={handleClick(setRightSelected, setRightNameSelected)}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
@@ -308,6 +309,7 @@ export function MyChart({
               label="Easy attacks"
               stackId="attcounts"
               fill={EASY_COLOR}
+              stroke={EASY_COLOR}
             />
             <Area
               dataKey={(value) => value.possible_attacks.length}
@@ -315,6 +317,7 @@ export function MyChart({
               label="Possible attacks"
               stackId="attcounts"
               fill={POSSIBLE_COLOR}
+              stroke={POSSIBLE_COLOR}
             />
             <Area
               dataKey={(value) => value.hard_attacks.length}
@@ -322,6 +325,7 @@ export function MyChart({
               label="Impossible attacks"
               stackId="attcounts"
               fill={HARD_COLOR}
+              stroke={HARD_COLOR}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -335,7 +339,6 @@ export function MyChart({
           <ComposedChart
             data={left_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-            barCategoryGap={-1}
             onClick={handleClick(setLeftSelected, setLeftNameSelected)}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
@@ -348,6 +351,7 @@ export function MyChart({
               label="Easy defends"
               stackId="defcounts"
               fill={EASY_COLOR}
+              stroke={EASY_COLOR}
             />
             <Area
               dataKey={(value) => value.possible_defends.length}
@@ -355,6 +359,7 @@ export function MyChart({
               label="Possible defends"
               stackId="defcounts"
               fill={POSSIBLE_COLOR}
+              stroke={POSSIBLE_COLOR}
             />
             <Area
               dataKey={(value) => value.hard_defends.length}
@@ -362,6 +367,7 @@ export function MyChart({
               label="Impossible defends"
               stackId="defcounts"
               fill={HARD_COLOR}
+              stroke={HARD_COLOR}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -375,7 +381,6 @@ export function MyChart({
           <ComposedChart
             data={right_data}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-            barCategoryGap={-1}
             onClick={handleClick(setRightSelected, setRightNameSelected)}
           >
             <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
@@ -388,6 +393,7 @@ export function MyChart({
               label="Easy defends"
               stackId="defcounts"
               fill={EASY_COLOR}
+              stroke={EASY_COLOR}
             />
             <Area
               dataKey={(value) => value.possible_defends.length}
@@ -395,6 +401,7 @@ export function MyChart({
               label="Possible defends"
               stackId="defcounts"
               fill={POSSIBLE_COLOR}
+              stroke={POSSIBLE_COLOR}
             />
             <Area
               dataKey={(value) => value.hard_defends.length}
@@ -402,6 +409,7 @@ export function MyChart({
               label="Impossible defends"
               stackId="defcounts"
               fill={HARD_COLOR}
+              stroke={HARD_COLOR}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -415,7 +423,6 @@ export function MyChart({
           <ComposedChart
             data={leftSelected}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-            barCategoryGap={-1}
           >
             <XAxis
               xAxisId="name"
@@ -438,6 +445,7 @@ export function MyChart({
               dataKey="attacker_ff"
               name={"FF of " + leftNameSelected}
               fill="#666600"
+              stroke="#666600"
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -451,7 +459,6 @@ export function MyChart({
           <ComposedChart
             data={leftSelected}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-            barCategoryGap={-1}
           >
             <XAxis
               xAxisId="name"
@@ -474,6 +481,7 @@ export function MyChart({
               dataKey="defender_ff"
               name="FF of attacker"
               fill="#006666"
+              stroke="#006666"
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -487,7 +495,6 @@ export function MyChart({
           <ComposedChart
             data={rightSelected}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-            barCategoryGap={-1}
           >
             <XAxis
               xAxisId="name"
@@ -510,6 +517,7 @@ export function MyChart({
               name={"FF of " + rightNameSelected}
               dataKey="attacker_ff"
               fill="#666600"
+              stroke="#666600"
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
@@ -523,7 +531,6 @@ export function MyChart({
           <ComposedChart
             data={rightSelected}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-            barCategoryGap={-1}
           >
             <XAxis
               xAxisId="name"
@@ -546,6 +553,7 @@ export function MyChart({
               dataKey="defender_ff"
               name="FF of attacker"
               fill="#006666"
+              stroke="#006666"
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </ComposedChart>
