@@ -188,16 +188,13 @@ export default function SPA() {
   }
 
   return (
-    <div className="grid grid-cols-12 gap-5 m-5">
-      <Button onClick={reset} className="lg:col-span-4 col-span-6">
-        Reset
-      </Button>
-      <Button
-        onClick={logout}
-        className="lg:col-span-4 col-span-6 lg:col-end-13 lg:col-start-9"
-      >
-        Logout
-      </Button>
+    <div className="grid grid-cols-2 gap-5 m-5">
+      <div>
+        <Button onClick={reset}>Reset</Button>
+      </div>
+      <div className="justify-self-end">
+        <Button onClick={logout}>Logout</Button>
+      </div>
       <MyChart
         leftffscouterdata={leftFFScouterData}
         rightffscouterdata={rightFFScouterData}

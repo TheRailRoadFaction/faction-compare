@@ -247,7 +247,7 @@ export function MyChart({
 
   return (
     <>
-      <Card className="col-span-12 lg:col-span-6">
+      <Card className="col-span-2 lg:col-span-1">
         <CardHeader>
           <CardTitle>FF as attacker (left)</CardTitle>
         </CardHeader>
@@ -294,7 +294,7 @@ export function MyChart({
           </ComposedChart>
         </ChartContainer>
       </Card>
-      <Card className="col-span-12 lg:col-span-6">
+      <Card className="col-span-2 lg:col-span-1">
         <CardHeader>
           <CardTitle>FF as attacker (right)</CardTitle>
         </CardHeader>
@@ -341,7 +341,7 @@ export function MyChart({
           </ComposedChart>
         </ChartContainer>
       </Card>
-      <Card className="col-span-12 lg:col-span-6">
+      <Card className="col-span-2 lg:col-span-1">
         <CardHeader>
           <CardTitle>FF as defender (left)</CardTitle>
         </CardHeader>
@@ -388,7 +388,7 @@ export function MyChart({
           </ComposedChart>
         </ChartContainer>
       </Card>
-      <Card className="col-span-12 lg:col-span-6">
+      <Card className="col-span-2 lg:col-span-1">
         <CardHeader>
           <CardTitle>FF as defender (right)</CardTitle>
         </CardHeader>
@@ -435,7 +435,7 @@ export function MyChart({
           </ComposedChart>
         </ChartContainer>
       </Card>
-      <Card className="col-span-12 lg:col-span-6">
+      <Card className="col-span-2 lg:col-span-1">
         <CardHeader>
           <CardTitle>FF as attacker ({leftNameSelected})</CardTitle>
         </CardHeader>
@@ -471,7 +471,7 @@ export function MyChart({
           </ComposedChart>
         </ChartContainer>
       </Card>
-      <Card className="col-span-12 lg:col-span-6">
+      <Card className="col-span-2 lg:col-span-1">
         <CardHeader>
           <CardTitle>FF as defender ({leftNameSelected})</CardTitle>
         </CardHeader>
@@ -507,7 +507,7 @@ export function MyChart({
           </ComposedChart>
         </ChartContainer>
       </Card>
-      <Card className="col-span-12 lg:col-span-6">
+      <Card className="col-span-2 lg:col-span-1">
         <CardHeader>
           <CardTitle>FF as attacker ({rightNameSelected})</CardTitle>
         </CardHeader>
@@ -543,7 +543,7 @@ export function MyChart({
           </ComposedChart>
         </ChartContainer>
       </Card>
-      <Card className="col-span-12 lg:col-span-6">
+      <Card className="col-span-2 lg:col-span-1">
         <CardHeader>
           <CardTitle>FF as defender ({rightNameSelected})</CardTitle>
         </CardHeader>
