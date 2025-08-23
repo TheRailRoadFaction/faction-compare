@@ -23,9 +23,10 @@ import {
   TornMemberApi,
   FFScouterJson,
   FactionColumns,
+  MemberColumns,
 } from "./types";
 import { CategoricalChartState } from "recharts/types/chart/types";
-import { FactionDataTable } from "./data-table";
+import { DataTable } from "./data-table";
 
 const EASY_BSS_MAX = 2.5;
 const POSSIBLE_BSS_MAX = 4.0;
@@ -101,6 +102,8 @@ export function MyChart({
         id: value.id,
         attacker_ff: value.attacker_ff,
         defender_ff: value.defender_ff,
+        bss_public: value.bss_public,
+        bs_estimate_human: value.bs_estimate_human,
         easy_attack:
           value.attacker_ff != null && value.attacker_ff <= EASY_BSS_MAX
             ? 1
@@ -172,6 +175,7 @@ export function MyChart({
               "" + enemy.player_id,
               value.bss_public,
               enemy.bss_public,
+              enemy.bs_estimate_human,
             ),
         );
         const lists = {
@@ -445,11 +449,11 @@ export function MyChart({
       </Card>
       <Card className="col-span-2 lg:col-span-1">
         <CardHeader>
-          <CardTitle>Left faction table</CardTitle>
+          <CardTitle>Left faction data</CardTitle>
         </CardHeader>
         <CardContent>
           Total: {left_data.length}
-          <FactionDataTable
+          <DataTable
             columns={FactionColumns}
             data={left_data}
             onClick={handleFactionTableClick(
@@ -461,11 +465,11 @@ export function MyChart({
       </Card>
       <Card className="col-span-2 lg:col-span-1">
         <CardHeader>
-          <CardTitle>Right faction table</CardTitle>
+          <CardTitle>Right faction data</CardTitle>
         </CardHeader>
         <CardContent>
           Total: {right_data.length}
-          <FactionDataTable
+          <DataTable
             columns={FactionColumns}
             data={right_data}
             onClick={handleFactionTableClick(
@@ -625,6 +629,30 @@ export function MyChart({
               <ChartTooltip content={<ChartTooltipContent />} />
             </ComposedChart>
           </ChartContainer>
+        </CardContent>
+      </Card>
+      <Card className="col-span-2 lg:col-span-1">
+        <CardHeader>
+          <CardTitle>{leftNameSelected} details</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <DataTable
+            columns={MemberColumns}
+            data={leftSelected}
+            onClick={() => {}}
+          />
+        </CardContent>
+      </Card>
+      <Card className="col-span-2 lg:col-span-1">
+        <CardHeader>
+          <CardTitle>{rightNameSelected} details</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <DataTable
+            columns={MemberColumns}
+            data={rightSelected}
+            onClick={() => {}}
+          />
         </CardContent>
       </Card>
     </>

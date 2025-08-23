@@ -22,7 +22,7 @@ interface DataTableProps<TData, TValue> {
   onClick: (value: TData) => void | undefined;
 }
 
-export function FactionDataTable<TData, TValue>({
+export function DataTable<TData, TValue>({
   columns,
   data,
   onClick,

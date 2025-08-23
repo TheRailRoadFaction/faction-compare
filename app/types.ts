@@ -9,14 +9,19 @@ export class FairFightScore {
   id: string;
   attacker_ff: number | null;
   defender_ff: number | null;
+  bss_public: number | null;
+  bs_estimate_human: string | null;
   constructor(
     name: string,
     id: string,
     battle_score: number | null,
     opponent_battle_score: number | null,
+    bs_estimate_human: string | null,
   ) {
     this.name = name;
     this.id = id;
+    this.bss_public = opponent_battle_score;
+    this.bs_estimate_human = bs_estimate_human;
     if (battle_score == null || opponent_battle_score == null) {
       this.attacker_ff = null;
       this.defender_ff = null;
@@ -57,6 +62,8 @@ export interface FFScouter {
 export interface DrillDownData {
   name: string;
   id: string;
+  bss_public: number | null;
+  bs_estimate_human: string | null;
   attacker_ff: number | null;
   defender_ff: number | null;
   easy_attack: number;
@@ -255,5 +262,28 @@ export const FactionColumns: ColumnDef<GraphData>[] = [
   {
     accessorKey: "hard_defends_count",
     header: "Hard def",
+  },
+];
+
+export const MemberColumns: ColumnDef<DrillDownData>[] = [
+  {
+    accessorKey: "name",
+    header: "Name",
+  },
+  {
+    accessorKey: "bss_public",
+    header: "BSS",
+  },
+  {
+    accessorKey: "bs_estimate_human",
+    header: "BS Est",
+  },
+  {
+    accessorKey: "attacker_ff",
+    header: "FF att",
+  },
+  {
+    accessorKey: "defender_ff",
+    header: "FF def",
   },
 ];
