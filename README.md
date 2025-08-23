@@ -41,7 +41,4 @@ Things I want to add
 
 - Add a count of members above and below a person in the tooltip
 - Add a box around the other faction's lines showing who the 4.0-2.5 targets are
-- Make the ranges configurable with fields
-- Test on mobile
-- Deploy as github page
-- Turn the bar charts into area charts, they're way cooler but onClick doesn't work the same way
+- Make the easy and possible numbers configurable with fields
