@@ -1,3 +1,4 @@
+import { ColumnDef } from "@tanstack/react-table";
 import * as z from "zod";
 
 export type keys = { ffScouterKey: string; publicKey: string };
@@ -68,8 +69,11 @@ export interface DrillDownData {
 
 export interface GraphData {
   name: string;
+  number: number;
+  id: number;
   opponent_scores: FairFightScore[];
   bss_public: number | null;
+  bs_estimate_human: string | null;
   easy_attacks: FairFightScore[];
   possible_attacks: FairFightScore[];
   hard_attacks: FairFightScore[];
@@ -210,3 +214,46 @@ export type TornFactionBasicApi = z.infer<typeof TornFactionBasicApi>;
 //  };
 //  position: string;
 //}
+
+export const FactionColumns: ColumnDef<GraphData>[] = [
+  {
+    accessorKey: "number",
+    header: "Index",
+  },
+  {
+    accessorKey: "name",
+    header: "Name",
+  },
+  {
+    accessorKey: "bss_public",
+    header: "BSS",
+  },
+  {
+    accessorKey: "bs_estimate_human",
+    header: "BS Est",
+  },
+  {
+    accessorKey: "easy_attacks_count",
+    header: "Easy att",
+  },
+  {
+    accessorKey: "possible_attacks_count",
+    header: "Possible att",
+  },
+  {
+    accessorKey: "hard_attacks_count",
+    header: "Hard att",
+  },
+  {
+    accessorKey: "easy_defends_count",
+    header: "Easy def",
+  },
+  {
+    accessorKey: "possible_defends_count",
+    header: "Possible def",
+  },
+  {
+    accessorKey: "hard_defends_count",
+    header: "Hard def",
+  },
+];

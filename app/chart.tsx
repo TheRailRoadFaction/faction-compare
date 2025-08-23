@@ -8,7 +8,6 @@ import {
 import { useState, Dispatch, SetStateAction } from "react";
 import {
   Area,
-  Bar,
   CartesianGrid,
   ComposedChart,
   Legend,
@@ -23,8 +22,10 @@ import {
   GraphData,
   TornMemberApi,
   FFScouterJson,
+  FactionColumns,
 } from "./types";
 import { CategoricalChartState } from "recharts/types/chart/types";
+import { DataTable } from "./data-table";
 
 const EASY_BSS_MAX = 2.5;
 const POSSIBLE_BSS_MAX = 4.0;
@@ -150,7 +151,7 @@ export function MyChart({
       opponent: FFScouterResult,
     ) => {
       let member_number = 0;
-      return (value: FFScouterJson) => {
+      return (value: FFScouterJson): GraphData => {
         member_number++;
         const member: TornMemberApi =
           primaryfaction.members["" + value.player_id];
@@ -198,6 +199,7 @@ export function MyChart({
           name: member?.name ?? "Unknown",
           number: member_number,
           id: value.player_id,
+          bs_estimate_human: value.bs_estimate_human,
           opponent_scores: opponent_scores,
           bss_public: value.bss_public,
           easy_attacks: lists.easy_attacks,
@@ -425,6 +427,24 @@ export function MyChart({
               <ChartTooltip content={<ChartTooltipContent />} />
             </ComposedChart>
           </ChartContainer>
+        </CardContent>
+      </Card>
+      <Card className="col-span-2 lg:col-span-1">
+        <CardHeader>
+          <CardTitle>Left faction table</CardTitle>
+        </CardHeader>
+        <CardContent>
+          Total: {left_data.length}
+          <DataTable columns={FactionColumns} data={left_data} />
+        </CardContent>
+      </Card>
+      <Card className="col-span-2 lg:col-span-1">
+        <CardHeader>
+          <CardTitle>Right faction table</CardTitle>
+        </CardHeader>
+        <CardContent>
+          Total: {right_data.length}
+          <DataTable columns={FactionColumns} data={right_data} />
         </CardContent>
       </Card>
       <Card className="col-span-2 lg:col-span-1">
