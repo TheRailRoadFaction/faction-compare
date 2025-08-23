@@ -34,7 +34,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="grid grid-cols-1 justify-items-end m-5">
+          <div className="grid grid-cols-1 justify-items-end mt-5 mx-5">
             <ModeToggle></ModeToggle>
           </div>
           {children}

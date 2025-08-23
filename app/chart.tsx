@@ -249,11 +249,11 @@ export function MyChart({
   return (
     <>
       <Tabs defaultValue="faction_charts">
-        <TabsList className="m-5">
+        <TabsList className="mt-5 mx-5">
           <TabsTrigger value="faction_charts">Faction Charts</TabsTrigger>
-          <TabsTrigger value="faction_data">Faction Data</TabsTrigger>
+          <TabsTrigger value="faction_data">Data</TabsTrigger>
           <TabsTrigger value="member_charts">Member Charts</TabsTrigger>
-          <TabsTrigger value="member_data">Member Data</TabsTrigger>
+          <TabsTrigger value="member_data">Data</TabsTrigger>
         </TabsList>
         <TabsContent
           value="faction_charts"
