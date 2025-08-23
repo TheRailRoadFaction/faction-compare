@@ -66,7 +66,6 @@ export function MyChart({
     leftfactionbasic,
     rightfactionbasic,
   );
-  const max_yaxis = Math.max(left_data.length, right_data.length);
 
   const [leftSelected, setLeftSelected] = useState<DrillDownData[]>([]);
   const [leftNameSelected, setLeftNameSelected] = useState("");
@@ -280,7 +279,7 @@ export function MyChart({
                     textAnchor="end"
                     interval="equidistantPreserveStart"
                   />
-                  <YAxis label="count" domain={[0, max_yaxis]} />
+                  <YAxis label="count" />
                   <Legend verticalAlign="top" />
                   <CartesianGrid strokeDasharray="3 3" />
                   <Area
@@ -333,7 +332,7 @@ export function MyChart({
                     textAnchor="end"
                     interval="equidistantPreserveStart"
                   />
-                  <YAxis label="count" domain={[0, max_yaxis]} />
+                  <YAxis label="count" />
                   <Legend verticalAlign="top" />
                   <CartesianGrid strokeDasharray="3 3" />
                   <Area
@@ -386,7 +385,7 @@ export function MyChart({
                     textAnchor="end"
                     interval="equidistantPreserveStart"
                   />
-                  <YAxis label="count" domain={[0, max_yaxis]} />
+                  <YAxis label="count" />
                   <Legend verticalAlign="top" />
                   <CartesianGrid strokeDasharray="3 3" />
                   <Area
@@ -439,7 +438,7 @@ export function MyChart({
                     textAnchor="end"
                     interval="equidistantPreserveStart"
                   />
-                  <YAxis label="count" domain={[0, max_yaxis]} />
+                  <YAxis label="count" />
                   <Legend verticalAlign="top" />
                   <CartesianGrid strokeDasharray="3 3" />
                   <Area
