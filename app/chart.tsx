@@ -27,6 +27,7 @@ import {
 } from "./types";
 import { CategoricalChartState } from "recharts/types/chart/types";
 import { DataTable } from "./data-table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const EASY_BSS_MAX = 2.5;
 const POSSIBLE_BSS_MAX = 4.0;
@@ -247,414 +248,451 @@ export function MyChart({
 
   return (
     <>
-      <Card className="col-span-2 lg:col-span-1">
-        <CardHeader>
-          <CardTitle>FF as attacker (left)</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig}>
-            <ComposedChart
-              data={left_data}
-              margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-              onClick={handleChartClick(setLeftSelected, setLeftNameSelected)}
-              style={{ cursor: "pointer" }}
-            >
-              <XAxis
-                dataKey="name"
-                angle={-45}
-                textAnchor="end"
-                interval="equidistantPreserveStart"
+      <Tabs defaultValue="faction_charts">
+        <TabsList className="m-5">
+          <TabsTrigger value="faction_charts">Faction Charts</TabsTrigger>
+          <TabsTrigger value="faction_data">Faction Data</TabsTrigger>
+          <TabsTrigger value="member_charts">Member Charts</TabsTrigger>
+          <TabsTrigger value="member_data">Member Charts</TabsTrigger>
+        </TabsList>
+        <TabsContent
+          value="faction_charts"
+          className="grid grid-cols-2 gap-5 m-5"
+        >
+          <Card className="col-span-2 lg:col-span-1">
+            <CardHeader>
+              <CardTitle>FF as attacker (left)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig}>
+                <ComposedChart
+                  data={left_data}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                  onClick={handleChartClick(
+                    setLeftSelected,
+                    setLeftNameSelected,
+                  )}
+                  style={{ cursor: "pointer" }}
+                >
+                  <XAxis
+                    dataKey="name"
+                    angle={-45}
+                    textAnchor="end"
+                    interval="equidistantPreserveStart"
+                  />
+                  <YAxis label="count" domain={[0, max_yaxis]} />
+                  <Legend verticalAlign="top" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Area
+                    dataKey={(value) => value.easy_attacks.length}
+                    name="Easy"
+                    label="Easy targets"
+                    stackId="attcounts"
+                    fill={EASY_COLOR}
+                    stroke={EASY_COLOR}
+                  />
+                  <Area
+                    name="Possible"
+                    dataKey={(value) => value.possible_attacks.length}
+                    label="Possible attacks"
+                    stackId="attcounts"
+                    fill={POSSIBLE_COLOR}
+                    stroke={POSSIBLE_COLOR}
+                  />
+                  <Area
+                    name="Impossible"
+                    dataKey={(value) => value.hard_attacks.length}
+                    label="Impossible attacks"
+                    stackId="attcounts"
+                    fill={HARD_COLOR}
+                    stroke={HARD_COLOR}
+                  />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                </ComposedChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+          <Card className="col-span-2 lg:col-span-1">
+            <CardHeader>
+              <CardTitle>FF as attacker (right)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig}>
+                <ComposedChart
+                  data={right_data}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                  onClick={handleChartClick(
+                    setRightSelected,
+                    setRightNameSelected,
+                  )}
+                  style={{ cursor: "pointer" }}
+                >
+                  <XAxis
+                    dataKey="name"
+                    angle={-45}
+                    textAnchor="end"
+                    interval="equidistantPreserveStart"
+                  />
+                  <YAxis label="count" domain={[0, max_yaxis]} />
+                  <Legend verticalAlign="top" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Area
+                    dataKey={(value) => value.easy_attacks.length}
+                    name="Easy"
+                    label="Easy attacks"
+                    stackId="attcounts"
+                    fill={EASY_COLOR}
+                    stroke={EASY_COLOR}
+                  />
+                  <Area
+                    dataKey={(value) => value.possible_attacks.length}
+                    name="Possible"
+                    label="Possible attacks"
+                    stackId="attcounts"
+                    fill={POSSIBLE_COLOR}
+                    stroke={POSSIBLE_COLOR}
+                  />
+                  <Area
+                    dataKey={(value) => value.hard_attacks.length}
+                    name="Impossible"
+                    label="Impossible attacks"
+                    stackId="attcounts"
+                    fill={HARD_COLOR}
+                    stroke={HARD_COLOR}
+                  />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                </ComposedChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+          <Card className="col-span-2 lg:col-span-1">
+            <CardHeader>
+              <CardTitle>FF as defender (left)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig}>
+                <ComposedChart
+                  data={left_data}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                  onClick={handleChartClick(
+                    setLeftSelected,
+                    setLeftNameSelected,
+                  )}
+                  style={{ cursor: "pointer" }}
+                >
+                  <XAxis
+                    dataKey="name"
+                    angle={-45}
+                    textAnchor="end"
+                    interval="equidistantPreserveStart"
+                  />
+                  <YAxis label="count" domain={[0, max_yaxis]} />
+                  <Legend verticalAlign="top" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Area
+                    dataKey={(value) => value.easy_defends.length}
+                    name="Easy"
+                    label="Easy defends"
+                    stackId="defcounts"
+                    fill={EASY_COLOR}
+                    stroke={EASY_COLOR}
+                  />
+                  <Area
+                    dataKey={(value) => value.possible_defends.length}
+                    name="Possible"
+                    label="Possible defends"
+                    stackId="defcounts"
+                    fill={POSSIBLE_COLOR}
+                    stroke={POSSIBLE_COLOR}
+                  />
+                  <Area
+                    dataKey={(value) => value.hard_defends.length}
+                    name="Impossible"
+                    label="Impossible defends"
+                    stackId="defcounts"
+                    fill={HARD_COLOR}
+                    stroke={HARD_COLOR}
+                  />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                </ComposedChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+          <Card className="col-span-2 lg:col-span-1">
+            <CardHeader>
+              <CardTitle>FF as defender (right)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig}>
+                <ComposedChart
+                  data={right_data}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                  onClick={handleChartClick(
+                    setRightSelected,
+                    setRightNameSelected,
+                  )}
+                  style={{ cursor: "pointer" }}
+                >
+                  <XAxis
+                    dataKey="name"
+                    angle={-45}
+                    textAnchor="end"
+                    interval="equidistantPreserveStart"
+                  />
+                  <YAxis label="count" domain={[0, max_yaxis]} />
+                  <Legend verticalAlign="top" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Area
+                    dataKey={(value) => value.easy_defends.length}
+                    name="Easy"
+                    label="Easy defends"
+                    stackId="defcounts"
+                    fill={EASY_COLOR}
+                    stroke={EASY_COLOR}
+                  />
+                  <Area
+                    dataKey={(value) => value.possible_defends.length}
+                    name="Possible"
+                    label="Possible defends"
+                    stackId="defcounts"
+                    fill={POSSIBLE_COLOR}
+                    stroke={POSSIBLE_COLOR}
+                  />
+                  <Area
+                    dataKey={(value) => value.hard_defends.length}
+                    name="Impossible"
+                    label="Impossible defends"
+                    stackId="defcounts"
+                    fill={HARD_COLOR}
+                    stroke={HARD_COLOR}
+                  />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                </ComposedChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent
+          value="faction_data"
+          className="grid grid-cols-2 gap-5 m-5"
+        >
+          <Card className="col-span-2 lg:col-span-1">
+            <CardHeader>
+              <CardTitle>Left faction data</CardTitle>
+            </CardHeader>
+            <CardContent>
+              Total: {left_data.length}
+              <DataTable
+                columns={FactionColumns}
+                data={left_data}
+                onClick={handleFactionTableClick(
+                  setLeftSelected,
+                  setLeftNameSelected,
+                )}
               />
-              <YAxis label="count" domain={[0, max_yaxis]} />
-              <Legend verticalAlign="top" />
-              <CartesianGrid strokeDasharray="3 3" />
-              <Area
-                dataKey={(value) => value.easy_attacks.length}
-                name="Easy"
-                label="Easy targets"
-                stackId="attcounts"
-                fill={EASY_COLOR}
-                stroke={EASY_COLOR}
+            </CardContent>
+          </Card>
+          <Card className="col-span-2 lg:col-span-1">
+            <CardHeader>
+              <CardTitle>Right faction data</CardTitle>
+            </CardHeader>
+            <CardContent>
+              Total: {right_data.length}
+              <DataTable
+                columns={FactionColumns}
+                data={right_data}
+                onClick={handleFactionTableClick(
+                  setRightSelected,
+                  setRightNameSelected,
+                )}
               />
-              <Area
-                name="Possible"
-                dataKey={(value) => value.possible_attacks.length}
-                label="Possible attacks"
-                stackId="attcounts"
-                fill={POSSIBLE_COLOR}
-                stroke={POSSIBLE_COLOR}
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent
+          value="member_charts"
+          className="grid grid-cols-2 gap-5 m-5"
+        >
+          <Card className="col-span-2 lg:col-span-1">
+            <CardHeader>
+              <CardTitle>FF as attacker ({leftNameSelected})</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig}>
+                <ComposedChart
+                  data={leftSelected}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                >
+                  <XAxis
+                    xAxisId="name"
+                    label="name"
+                    dataKey="name"
+                    angle={-45}
+                    textAnchor="end"
+                    interval="equidistantPreserveStart"
+                  />
+                  <YAxis
+                    yAxisId="attacker"
+                    domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
+                    allowDataOverflow
+                  />
+                  <Legend verticalAlign="top" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Area
+                    xAxisId="name"
+                    yAxisId="attacker"
+                    dataKey="attacker_ff"
+                    name={"FF of " + leftNameSelected}
+                    fill="#666600"
+                    stroke="#666600"
+                  />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                </ComposedChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+          <Card className="col-span-2 lg:col-span-1">
+            <CardHeader>
+              <CardTitle>FF as defender ({leftNameSelected})</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig}>
+                <ComposedChart
+                  data={leftSelected}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                >
+                  <XAxis
+                    xAxisId="name"
+                    label="name"
+                    dataKey="name"
+                    angle={-45}
+                    textAnchor="end"
+                    interval="equidistantPreserveStart"
+                  />
+                  <YAxis
+                    yAxisId="defender"
+                    domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
+                    allowDataOverflow
+                  />
+                  <Legend verticalAlign="top" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Area
+                    xAxisId="name"
+                    yAxisId="defender"
+                    dataKey="defender_ff"
+                    name="FF of attacker"
+                    fill="#006666"
+                    stroke="#006666"
+                  />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                </ComposedChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+          <Card className="col-span-2 lg:col-span-1">
+            <CardHeader>
+              <CardTitle>FF as attacker ({rightNameSelected})</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig}>
+                <ComposedChart
+                  data={rightSelected}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                >
+                  <XAxis
+                    xAxisId="name"
+                    label="name"
+                    dataKey="name"
+                    angle={-45}
+                    textAnchor="end"
+                    interval="equidistantPreserveStart"
+                  />
+                  <YAxis
+                    yAxisId="attacker"
+                    domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
+                    allowDataOverflow
+                  />
+                  <Legend verticalAlign="top" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Area
+                    xAxisId="name"
+                    yAxisId="attacker"
+                    name={"FF of " + rightNameSelected}
+                    dataKey="attacker_ff"
+                    fill="#666600"
+                    stroke="#666600"
+                  />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                </ComposedChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+          <Card className="col-span-2 lg:col-span-1">
+            <CardHeader>
+              <CardTitle>FF as defender ({rightNameSelected})</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig}>
+                <ComposedChart
+                  data={rightSelected}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                >
+                  <XAxis
+                    xAxisId="name"
+                    label="name"
+                    dataKey="name"
+                    angle={-45}
+                    textAnchor="end"
+                    interval="equidistantPreserveStart"
+                  />
+                  <YAxis
+                    yAxisId="defender"
+                    domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
+                    allowDataOverflow
+                  />
+                  <Legend verticalAlign="top" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Area
+                    xAxisId="name"
+                    yAxisId="defender"
+                    dataKey="defender_ff"
+                    name="FF of attacker"
+                    fill="#006666"
+                    stroke="#006666"
+                  />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                </ComposedChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="member_data" className="grid grid-cols-2 gap-5 m-5">
+          <Card className="col-span-2 lg:col-span-1">
+            <CardHeader>
+              <CardTitle>{leftNameSelected} details</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <DataTable
+                columns={MemberColumns}
+                data={leftSelected}
+                onClick={() => {}}
               />
-              <Area
-                name="Impossible"
-                dataKey={(value) => value.hard_attacks.length}
-                label="Impossible attacks"
-                stackId="attcounts"
-                fill={HARD_COLOR}
-                stroke={HARD_COLOR}
+            </CardContent>
+          </Card>
+          <Card className="col-span-2 lg:col-span-1">
+            <CardHeader>
+              <CardTitle>{rightNameSelected} details</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <DataTable
+                columns={MemberColumns}
+                data={rightSelected}
+                onClick={() => {}}
               />
-              <ChartTooltip content={<ChartTooltipContent />} />
-            </ComposedChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-      <Card className="col-span-2 lg:col-span-1">
-        <CardHeader>
-          <CardTitle>FF as attacker (right)</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig}>
-            <ComposedChart
-              data={right_data}
-              margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-              onClick={handleChartClick(setRightSelected, setRightNameSelected)}
-              style={{ cursor: "pointer" }}
-            >
-              <XAxis
-                dataKey="name"
-                angle={-45}
-                textAnchor="end"
-                interval="equidistantPreserveStart"
-              />
-              <YAxis label="count" domain={[0, max_yaxis]} />
-              <Legend verticalAlign="top" />
-              <CartesianGrid strokeDasharray="3 3" />
-              <Area
-                dataKey={(value) => value.easy_attacks.length}
-                name="Easy"
-                label="Easy attacks"
-                stackId="attcounts"
-                fill={EASY_COLOR}
-                stroke={EASY_COLOR}
-              />
-              <Area
-                dataKey={(value) => value.possible_attacks.length}
-                name="Possible"
-                label="Possible attacks"
-                stackId="attcounts"
-                fill={POSSIBLE_COLOR}
-                stroke={POSSIBLE_COLOR}
-              />
-              <Area
-                dataKey={(value) => value.hard_attacks.length}
-                name="Impossible"
-                label="Impossible attacks"
-                stackId="attcounts"
-                fill={HARD_COLOR}
-                stroke={HARD_COLOR}
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-            </ComposedChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-      <Card className="col-span-2 lg:col-span-1">
-        <CardHeader>
-          <CardTitle>FF as defender (left)</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig}>
-            <ComposedChart
-              data={left_data}
-              margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-              onClick={handleChartClick(setLeftSelected, setLeftNameSelected)}
-              style={{ cursor: "pointer" }}
-            >
-              <XAxis
-                dataKey="name"
-                angle={-45}
-                textAnchor="end"
-                interval="equidistantPreserveStart"
-              />
-              <YAxis label="count" domain={[0, max_yaxis]} />
-              <Legend verticalAlign="top" />
-              <CartesianGrid strokeDasharray="3 3" />
-              <Area
-                dataKey={(value) => value.easy_defends.length}
-                name="Easy"
-                label="Easy defends"
-                stackId="defcounts"
-                fill={EASY_COLOR}
-                stroke={EASY_COLOR}
-              />
-              <Area
-                dataKey={(value) => value.possible_defends.length}
-                name="Possible"
-                label="Possible defends"
-                stackId="defcounts"
-                fill={POSSIBLE_COLOR}
-                stroke={POSSIBLE_COLOR}
-              />
-              <Area
-                dataKey={(value) => value.hard_defends.length}
-                name="Impossible"
-                label="Impossible defends"
-                stackId="defcounts"
-                fill={HARD_COLOR}
-                stroke={HARD_COLOR}
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-            </ComposedChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-      <Card className="col-span-2 lg:col-span-1">
-        <CardHeader>
-          <CardTitle>FF as defender (right)</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig}>
-            <ComposedChart
-              data={right_data}
-              margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-              onClick={handleChartClick(setRightSelected, setRightNameSelected)}
-              style={{ cursor: "pointer" }}
-            >
-              <XAxis
-                dataKey="name"
-                angle={-45}
-                textAnchor="end"
-                interval="equidistantPreserveStart"
-              />
-              <YAxis label="count" domain={[0, max_yaxis]} />
-              <Legend verticalAlign="top" />
-              <CartesianGrid strokeDasharray="3 3" />
-              <Area
-                dataKey={(value) => value.easy_defends.length}
-                name="Easy"
-                label="Easy defends"
-                stackId="defcounts"
-                fill={EASY_COLOR}
-                stroke={EASY_COLOR}
-              />
-              <Area
-                dataKey={(value) => value.possible_defends.length}
-                name="Possible"
-                label="Possible defends"
-                stackId="defcounts"
-                fill={POSSIBLE_COLOR}
-                stroke={POSSIBLE_COLOR}
-              />
-              <Area
-                dataKey={(value) => value.hard_defends.length}
-                name="Impossible"
-                label="Impossible defends"
-                stackId="defcounts"
-                fill={HARD_COLOR}
-                stroke={HARD_COLOR}
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-            </ComposedChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-      <Card className="col-span-2 lg:col-span-1">
-        <CardHeader>
-          <CardTitle>Left faction data</CardTitle>
-        </CardHeader>
-        <CardContent>
-          Total: {left_data.length}
-          <DataTable
-            columns={FactionColumns}
-            data={left_data}
-            onClick={handleFactionTableClick(
-              setLeftSelected,
-              setLeftNameSelected,
-            )}
-          />
-        </CardContent>
-      </Card>
-      <Card className="col-span-2 lg:col-span-1">
-        <CardHeader>
-          <CardTitle>Right faction data</CardTitle>
-        </CardHeader>
-        <CardContent>
-          Total: {right_data.length}
-          <DataTable
-            columns={FactionColumns}
-            data={right_data}
-            onClick={handleFactionTableClick(
-              setRightSelected,
-              setRightNameSelected,
-            )}
-          />
-        </CardContent>
-      </Card>
-      <Card className="col-span-2 lg:col-span-1">
-        <CardHeader>
-          <CardTitle>FF as attacker ({leftNameSelected})</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig}>
-            <ComposedChart
-              data={leftSelected}
-              margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-            >
-              <XAxis
-                xAxisId="name"
-                label="name"
-                dataKey="name"
-                angle={-45}
-                textAnchor="end"
-                interval="equidistantPreserveStart"
-              />
-              <YAxis
-                yAxisId="attacker"
-                domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
-                allowDataOverflow
-              />
-              <Legend verticalAlign="top" />
-              <CartesianGrid strokeDasharray="3 3" />
-              <Area
-                xAxisId="name"
-                yAxisId="attacker"
-                dataKey="attacker_ff"
-                name={"FF of " + leftNameSelected}
-                fill="#666600"
-                stroke="#666600"
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-            </ComposedChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-      <Card className="col-span-2 lg:col-span-1">
-        <CardHeader>
-          <CardTitle>FF as defender ({leftNameSelected})</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig}>
-            <ComposedChart
-              data={leftSelected}
-              margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-            >
-              <XAxis
-                xAxisId="name"
-                label="name"
-                dataKey="name"
-                angle={-45}
-                textAnchor="end"
-                interval="equidistantPreserveStart"
-              />
-              <YAxis
-                yAxisId="defender"
-                domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
-                allowDataOverflow
-              />
-              <Legend verticalAlign="top" />
-              <CartesianGrid strokeDasharray="3 3" />
-              <Area
-                xAxisId="name"
-                yAxisId="defender"
-                dataKey="defender_ff"
-                name="FF of attacker"
-                fill="#006666"
-                stroke="#006666"
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-            </ComposedChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-      <Card className="col-span-2 lg:col-span-1">
-        <CardHeader>
-          <CardTitle>FF as attacker ({rightNameSelected})</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig}>
-            <ComposedChart
-              data={rightSelected}
-              margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-            >
-              <XAxis
-                xAxisId="name"
-                label="name"
-                dataKey="name"
-                angle={-45}
-                textAnchor="end"
-                interval="equidistantPreserveStart"
-              />
-              <YAxis
-                yAxisId="attacker"
-                domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
-                allowDataOverflow
-              />
-              <Legend verticalAlign="top" />
-              <CartesianGrid strokeDasharray="3 3" />
-              <Area
-                xAxisId="name"
-                yAxisId="attacker"
-                name={"FF of " + rightNameSelected}
-                dataKey="attacker_ff"
-                fill="#666600"
-                stroke="#666600"
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-            </ComposedChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-      <Card className="col-span-2 lg:col-span-1">
-        <CardHeader>
-          <CardTitle>FF as defender ({rightNameSelected})</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig}>
-            <ComposedChart
-              data={rightSelected}
-              margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-            >
-              <XAxis
-                xAxisId="name"
-                label="name"
-                dataKey="name"
-                angle={-45}
-                textAnchor="end"
-                interval="equidistantPreserveStart"
-              />
-              <YAxis
-                yAxisId="defender"
-                domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
-                allowDataOverflow
-              />
-              <Legend verticalAlign="top" />
-              <CartesianGrid strokeDasharray="3 3" />
-              <Area
-                xAxisId="name"
-                yAxisId="defender"
-                dataKey="defender_ff"
-                name="FF of attacker"
-                fill="#006666"
-                stroke="#006666"
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-            </ComposedChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-      <Card className="col-span-2 lg:col-span-1">
-        <CardHeader>
-          <CardTitle>{leftNameSelected} details</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <DataTable
-            columns={MemberColumns}
-            data={leftSelected}
-            onClick={() => {}}
-          />
-        </CardContent>
-      </Card>
-      <Card className="col-span-2 lg:col-span-1">
-        <CardHeader>
-          <CardTitle>{rightNameSelected} details</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <DataTable
-            columns={MemberColumns}
-            data={rightSelected}
-            onClick={() => {}}
-          />
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </>
   );
 }
