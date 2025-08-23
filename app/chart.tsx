@@ -25,7 +25,7 @@ import {
   FactionColumns,
 } from "./types";
 import { CategoricalChartState } from "recharts/types/chart/types";
-import { DataTable } from "./data-table";
+import { FactionDataTable } from "./data-table";
 
 const EASY_BSS_MAX = 2.5;
 const POSSIBLE_BSS_MAX = 4.0;
@@ -71,7 +71,7 @@ export function MyChart({
   const [rightSelected, setRightSelected] = useState<DrillDownData[]>([]);
   const [rightNameSelected, setRightNameSelected] = useState("");
 
-  function handleClick(
+  function handleChartClick(
     setter: Dispatch<SetStateAction<DrillDownData[]>>,
     nameSetter: Dispatch<SetStateAction<string>>,
   ) {
@@ -81,6 +81,16 @@ export function MyChart({
       }
       setter(massage_graph_data(nextState.activePayload[0].payload));
       nameSetter(nextState.activePayload[0].payload.name);
+    };
+  }
+
+  function handleFactionTableClick(
+    setter: Dispatch<SetStateAction<DrillDownData[]>>,
+    nameSetter: Dispatch<SetStateAction<string>>,
+  ) {
+    return function (value: GraphData) {
+      setter(massage_graph_data(value));
+      nameSetter(value.name);
     };
   }
 
@@ -242,7 +252,7 @@ export function MyChart({
             <ComposedChart
               data={left_data}
               margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-              onClick={handleClick(setLeftSelected, setLeftNameSelected)}
+              onClick={handleChartClick(setLeftSelected, setLeftNameSelected)}
             >
               <XAxis
                 dataKey="name"
@@ -291,7 +301,7 @@ export function MyChart({
             <ComposedChart
               data={right_data}
               margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-              onClick={handleClick(setRightSelected, setRightNameSelected)}
+              onClick={handleChartClick(setRightSelected, setRightNameSelected)}
             >
               <XAxis
                 dataKey="name"
@@ -340,7 +350,7 @@ export function MyChart({
             <ComposedChart
               data={left_data}
               margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-              onClick={handleClick(setLeftSelected, setLeftNameSelected)}
+              onClick={handleChartClick(setLeftSelected, setLeftNameSelected)}
             >
               <XAxis
                 dataKey="name"
@@ -389,7 +399,7 @@ export function MyChart({
             <ComposedChart
               data={right_data}
               margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-              onClick={handleClick(setRightSelected, setRightNameSelected)}
+              onClick={handleChartClick(setRightSelected, setRightNameSelected)}
             >
               <XAxis
                 dataKey="name"
@@ -435,7 +445,14 @@ export function MyChart({
         </CardHeader>
         <CardContent>
           Total: {left_data.length}
-          <DataTable columns={FactionColumns} data={left_data} />
+          <FactionDataTable
+            columns={FactionColumns}
+            data={left_data}
+            onClick={handleFactionTableClick(
+              setLeftSelected,
+              setLeftNameSelected,
+            )}
+          />
         </CardContent>
       </Card>
       <Card className="col-span-2 lg:col-span-1">
@@ -444,7 +461,14 @@ export function MyChart({
         </CardHeader>
         <CardContent>
           Total: {right_data.length}
-          <DataTable columns={FactionColumns} data={right_data} />
+          <FactionDataTable
+            columns={FactionColumns}
+            data={right_data}
+            onClick={handleFactionTableClick(
+              setRightSelected,
+              setRightNameSelected,
+            )}
+          />
         </CardContent>
       </Card>
       <Card className="col-span-2 lg:col-span-1">

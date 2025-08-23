@@ -19,11 +19,13 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onClick: (value: TData) => void | undefined;
 }
 
-export function DataTable<TData, TValue>({
+export function FactionDataTable<TData, TValue>({
   columns,
   data,
+  onClick,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -58,6 +60,9 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                onClick={() => {
+                  onClick(row.original);
+                }}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
