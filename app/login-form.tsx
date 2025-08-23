@@ -46,7 +46,7 @@ export function LoginForm({ className, setKeys, ...props }: LoginFormProps) {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     localStorage.setItem("keys", JSON.stringify(values));
-    setKeys(values)
+    setKeys(values);
   }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -54,7 +54,7 @@ export function LoginForm({ className, setKeys, ...props }: LoginFormProps) {
         <CardHeader>
           <CardTitle>Enter two API keys</CardTitle>
           <CardDescription>
-            Enter FF Scouter V3 key and Public Torn API key
+            Enter FF Scouter key and Public Torn API key
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -65,7 +65,7 @@ export function LoginForm({ className, setKeys, ...props }: LoginFormProps) {
                 name="ffScouterKey"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>FF Scouter V3 API Key</FormLabel>
+                    <FormLabel>FF Scouter API Key</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -129,7 +129,7 @@ export function LoginForm({ className, setKeys, ...props }: LoginFormProps) {
               href="http://ffscouter.com"
               className="underline underline-offset-4"
             >
-              Create an FF Scouter V3 key
+              Create an FF Scouter key
             </Link>
           </div>
         </CardContent>
