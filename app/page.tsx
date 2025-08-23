@@ -188,7 +188,7 @@ export default function SPA() {
   }
 
   return (
-    <div className="grid grid-cols-12 gap-10 m-10">
+    <div className="grid grid-cols-12 gap-5 m-5">
       <Button onClick={reset} className="lg:col-span-4 col-span-6">
         Reset
       </Button>

@@ -257,7 +257,12 @@ export function MyChart({
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
             onClick={handleClick(setLeftSelected, setLeftNameSelected)}
           >
-            <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
+            <XAxis
+              dataKey="name"
+              angle={-45}
+              textAnchor="end"
+              interval="equidistantPreserveStart"
+            />
             <YAxis label="count" domain={[0, max_yaxis]} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
@@ -299,7 +304,12 @@ export function MyChart({
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
             onClick={handleClick(setRightSelected, setRightNameSelected)}
           >
-            <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
+            <XAxis
+              dataKey="name"
+              angle={-45}
+              textAnchor="end"
+              interval="equidistantPreserveStart"
+            />
             <YAxis label="count" domain={[0, max_yaxis]} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
@@ -341,7 +351,12 @@ export function MyChart({
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
             onClick={handleClick(setLeftSelected, setLeftNameSelected)}
           >
-            <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
+            <XAxis
+              dataKey="name"
+              angle={-45}
+              textAnchor="end"
+              interval="equidistantPreserveStart"
+            />
             <YAxis label="count" domain={[0, max_yaxis]} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
@@ -383,7 +398,12 @@ export function MyChart({
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
             onClick={handleClick(setRightSelected, setRightNameSelected)}
           >
-            <XAxis dataKey="name" angle={-45} textAnchor="end" interval={1} />
+            <XAxis
+              dataKey="name"
+              angle={-45}
+              textAnchor="end"
+              interval="equidistantPreserveStart"
+            />
             <YAxis label="count" domain={[0, max_yaxis]} />
             <Legend verticalAlign="top" />
             <CartesianGrid strokeDasharray="3 3" />
@@ -430,7 +450,7 @@ export function MyChart({
               dataKey="name"
               angle={-45}
               textAnchor="end"
-              interval={1}
+              interval="equidistantPreserveStart"
             />
             <YAxis
               yAxisId="attacker"
@@ -466,7 +486,7 @@ export function MyChart({
               dataKey="name"
               angle={-45}
               textAnchor="end"
-              interval={1}
+              interval="equidistantPreserveStart"
             />
             <YAxis
               yAxisId="defender"
@@ -502,7 +522,7 @@ export function MyChart({
               dataKey="name"
               angle={-45}
               textAnchor="end"
-              interval={1}
+              interval="equidistantPreserveStart"
             />
             <YAxis
               yAxisId="attacker"
@@ -538,7 +558,7 @@ export function MyChart({
               dataKey="name"
               angle={-45}
               textAnchor="end"
-              interval={1}
+              interval="equidistantPreserveStart"
             />
             <YAxis
               yAxisId="defender"
