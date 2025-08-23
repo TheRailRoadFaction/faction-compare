@@ -144,100 +144,84 @@ export function MyChart({
     const sorted_left = leftffscouterdata.toSorted(sort_function);
     const sorted_right = rightffscouterdata.toSorted(sort_function);
 
-    const left_data: GraphData[] = sorted_left.map((value) => {
-      const member: TornMemberApi =
-        leftfactiondata.members["" + value.player_id];
-      const opponent_scores = sorted_right.map(
-        (enemy) =>
-          new FairFightScore(
-            rightfactionbasic.members["" + enemy.player_id].name,
-            "" + enemy.player_id,
-            value.bss_public,
-            enemy.bss_public,
+    const map_data = (
+      primaryfaction: TornFactionBasicApi,
+      opponentfaction: TornFactionBasicApi,
+      opponent: FFScouterResult,
+    ) => {
+      let member_number = 0;
+      return (value: FFScouterJson) => {
+        member_number++;
+        const member: TornMemberApi =
+          primaryfaction.members["" + value.player_id];
+        const opponent_scores = opponent.map(
+          (enemy) =>
+            new FairFightScore(
+              opponentfaction.members["" + enemy.player_id].name,
+              "" + enemy.player_id,
+              value.bss_public,
+              enemy.bss_public,
+            ),
+        );
+        const lists = {
+          easy_attacks: opponent_scores.filter(
+            (value) =>
+              value.attacker_ff != null && value.attacker_ff <= EASY_BSS_MAX,
           ),
-      );
-      return {
-        name: member?.name ?? "Unknown",
-        id: value.player_id,
-        opponent_scores: opponent_scores,
-        bss_public: value.bss_public,
-        easy_attacks: opponent_scores.filter(
-          (value) =>
-            value.attacker_ff != null && value.attacker_ff <= EASY_BSS_MAX,
-        ),
-        possible_attacks: opponent_scores.filter(
-          (value) =>
-            value.attacker_ff != null &&
-            value.attacker_ff <= POSSIBLE_BSS_MAX &&
-            value.attacker_ff > EASY_BSS_MAX,
-        ),
-        hard_attacks: opponent_scores.filter(
-          (value) =>
-            value.attacker_ff != null && value.attacker_ff > POSSIBLE_BSS_MAX,
-        ),
-        easy_defends: opponent_scores.filter(
-          (value) =>
-            value.defender_ff != null && value.defender_ff >= POSSIBLE_BSS_MAX,
-        ),
-        possible_defends: opponent_scores.filter(
-          (value) =>
-            value.defender_ff != null &&
-            value.defender_ff < POSSIBLE_BSS_MAX &&
-            value.defender_ff >= EASY_BSS_MAX,
-        ),
-        hard_defends: opponent_scores.filter(
-          (value) =>
-            value.defender_ff != null && value.defender_ff < EASY_BSS_MAX,
-        ),
+          possible_attacks: opponent_scores.filter(
+            (value) =>
+              value.attacker_ff != null &&
+              value.attacker_ff <= POSSIBLE_BSS_MAX &&
+              value.attacker_ff > EASY_BSS_MAX,
+          ),
+          hard_attacks: opponent_scores.filter(
+            (value) =>
+              value.attacker_ff != null && value.attacker_ff > POSSIBLE_BSS_MAX,
+          ),
+          easy_defends: opponent_scores.filter(
+            (value) =>
+              value.defender_ff != null &&
+              value.defender_ff >= POSSIBLE_BSS_MAX,
+          ),
+          possible_defends: opponent_scores.filter(
+            (value) =>
+              value.defender_ff != null &&
+              value.defender_ff < POSSIBLE_BSS_MAX &&
+              value.defender_ff >= EASY_BSS_MAX,
+          ),
+          hard_defends: opponent_scores.filter(
+            (value) =>
+              value.defender_ff != null && value.defender_ff < EASY_BSS_MAX,
+          ),
+        };
+        return {
+          name: member?.name ?? "Unknown",
+          number: member_number,
+          id: value.player_id,
+          opponent_scores: opponent_scores,
+          bss_public: value.bss_public,
+          easy_attacks: lists.easy_attacks,
+          easy_attacks_count: lists.easy_attacks.length,
+          possible_attacks: lists.possible_attacks,
+          possible_attacks_count: lists.possible_attacks.length,
+          hard_attacks: lists.hard_attacks,
+          hard_attacks_count: lists.hard_attacks.length,
+          easy_defends: lists.easy_defends,
+          easy_defends_count: lists.easy_defends.length,
+          possible_defends: lists.possible_defends,
+          possible_defends_count: lists.possible_defends.length,
+          hard_defends: lists.hard_defends,
+          hard_defends_count: lists.hard_defends.length,
+        };
       };
-    });
+    };
 
-    const right_data: GraphData[] = sorted_right.map((value) => {
-      const member: TornMemberApi =
-        rightfactiondata.members["" + value.player_id];
-      const opponent_scores = sorted_left.map(
-        (ours) =>
-          new FairFightScore(
-            leftfactionbasic.members["" + ours.player_id].name,
-            "" + ours.player_id,
-            value.bss_public,
-            ours.bss_public,
-          ),
-      );
-      return {
-        name: member?.name ?? "Unknown",
-        opponent_scores: opponent_scores,
-        bss_public: value.bss_public,
-        easy_attacks: opponent_scores.filter(
-          (value) =>
-            value.attacker_ff != null && value.attacker_ff <= EASY_BSS_MAX,
-        ),
-        possible_attacks: opponent_scores.filter(
-          (value) =>
-            value.attacker_ff != null &&
-            value.attacker_ff <= POSSIBLE_BSS_MAX &&
-            value.attacker_ff > EASY_BSS_MAX,
-        ),
-        hard_attacks: opponent_scores.filter(
-          (value) =>
-            value.attacker_ff != null && value.attacker_ff > POSSIBLE_BSS_MAX,
-        ),
-        easy_defends: opponent_scores.filter(
-          (value) =>
-            value.defender_ff != null && value.defender_ff >= POSSIBLE_BSS_MAX,
-        ),
-        possible_defends: opponent_scores.filter(
-          (value) =>
-            value.defender_ff != null &&
-            value.defender_ff < POSSIBLE_BSS_MAX &&
-            value.defender_ff >= EASY_BSS_MAX,
-        ),
-        hard_defends: opponent_scores.filter(
-          (value) =>
-            value.defender_ff != null && value.defender_ff < EASY_BSS_MAX,
-        ),
-      };
-    });
+    const left_data: GraphData[] = sorted_left.map(
+      map_data(leftfactiondata, rightfactiondata, sorted_right),
+    );
+    const right_data: GraphData[] = sorted_right.map(
+      map_data(rightfactiondata, leftfactiondata, sorted_left),
+    );
 
     console.log(left_data);
     console.log(right_data);

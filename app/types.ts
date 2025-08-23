@@ -76,6 +76,12 @@ export interface GraphData {
   easy_defends: FairFightScore[];
   possible_defends: FairFightScore[];
   hard_defends: FairFightScore[];
+  easy_attacks_count: number;
+  possible_attacks_count: number;
+  hard_attacks_count: number;
+  easy_defends_count: number;
+  possible_defends_count: number;
+  hard_defends_count: number;
 }
 
 export const TornWarFactionApi = z.object({
