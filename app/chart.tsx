@@ -261,7 +261,7 @@ export function MyChart({
         >
           <Card className="col-span-2 lg:col-span-1">
             <CardHeader>
-              <CardTitle>FF as attacker (left)</CardTitle>
+              <CardTitle>FF as attacker ({leftfactionbasic.name})</CardTitle>
             </CardHeader>
             <CardContent>
               <ChartContainer config={chartConfig}>
@@ -314,7 +314,7 @@ export function MyChart({
           </Card>
           <Card className="col-span-2 lg:col-span-1">
             <CardHeader>
-              <CardTitle>FF as attacker (right)</CardTitle>
+              <CardTitle>FF as attacker ({rightfactionbasic.name})</CardTitle>
             </CardHeader>
             <CardContent>
               <ChartContainer config={chartConfig}>
@@ -367,7 +367,7 @@ export function MyChart({
           </Card>
           <Card className="col-span-2 lg:col-span-1">
             <CardHeader>
-              <CardTitle>FF as defender (left)</CardTitle>
+              <CardTitle>FF as defender ({leftfactionbasic.name})</CardTitle>
             </CardHeader>
             <CardContent>
               <ChartContainer config={chartConfig}>
@@ -420,7 +420,7 @@ export function MyChart({
           </Card>
           <Card className="col-span-2 lg:col-span-1">
             <CardHeader>
-              <CardTitle>FF as defender (right)</CardTitle>
+              <CardTitle>FF as defender ({rightfactionbasic.name})</CardTitle>
             </CardHeader>
             <CardContent>
               <ChartContainer config={chartConfig}>
@@ -478,7 +478,7 @@ export function MyChart({
         >
           <Card className="col-span-2 lg:col-span-1">
             <CardHeader>
-              <CardTitle>Left faction data</CardTitle>
+              <CardTitle>{leftfactionbasic.name} data</CardTitle>
             </CardHeader>
             <CardContent>
               Total: {left_data.length}
@@ -494,7 +494,7 @@ export function MyChart({
           </Card>
           <Card className="col-span-2 lg:col-span-1">
             <CardHeader>
-              <CardTitle>Right faction data</CardTitle>
+              <CardTitle>{rightfactionbasic.name} data</CardTitle>
             </CardHeader>
             <CardContent>
               Total: {right_data.length}
