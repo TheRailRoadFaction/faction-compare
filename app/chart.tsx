@@ -253,7 +253,7 @@ export function MyChart({
           <TabsTrigger value="faction_charts">Faction Charts</TabsTrigger>
           <TabsTrigger value="faction_data">Faction Data</TabsTrigger>
           <TabsTrigger value="member_charts">Member Charts</TabsTrigger>
-          <TabsTrigger value="member_data">Member Charts</TabsTrigger>
+          <TabsTrigger value="member_data">Member Data</TabsTrigger>
         </TabsList>
         <TabsContent
           value="faction_charts"
