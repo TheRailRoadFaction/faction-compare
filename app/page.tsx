@@ -106,7 +106,11 @@ export default function SPA() {
     )
       .then((res) => res.json())
       .then((value) => TornFactionBasicApi.parse(value))
-      .then((value: TornFactionBasicApi) => setLeftFactionBasic(value));
+      .then((value: TornFactionBasicApi) => setLeftFactionBasic(value))
+      .catch((e) => {
+        console.log(e);
+        reset();
+      }); // TODO: Tell them something
 
     fetch(
       "https://api.torn.com/faction/" +
@@ -116,7 +120,11 @@ export default function SPA() {
     )
       .then((res) => res.json())
       .then((value) => TornFactionBasicApi.parse(value))
-      .then((value: TornFactionBasicApi) => setRightFactionBasic(value));
+      .then((value: TornFactionBasicApi) => setRightFactionBasic(value))
+      .catch((e) => {
+        console.log(e);
+        reset();
+      }); // TODO: Tell them something
   }, [keys, factionIds]);
 
   //run this every time keys changes
@@ -132,7 +140,11 @@ export default function SPA() {
     fetch("https://ffscouter.com/api/v1/get-stats?" + query.toString())
       .then((res) => res.json())
       .then((value) => FFScouterResult.parse(value))
-      .then((value: FFScouterResult) => setLeftFFScouterData(value));
+      .then((value: FFScouterResult) => setLeftFFScouterData(value))
+      .catch((e) => {
+        console.log(e);
+        reset();
+      }); // TODO: Tell them something
   }, [keys, leftFactionBasic]);
 
   useEffect(() => {
@@ -147,13 +159,20 @@ export default function SPA() {
     fetch("https://ffscouter.com/api/v1/get-stats?" + query.toString())
       .then((res) => res.json())
       .then((value) => FFScouterResult.parse(value))
-      .then((value: FFScouterResult) => setRightFFScouterData(value));
+      .then((value: FFScouterResult) => setRightFFScouterData(value))
+      .catch((e) => {
+        console.log(e);
+        reset();
+      }); // TODO: Tell them something
   }, [keys, rightFactionBasic]);
 
   if (!keys) {
     return (
-      <div className="container mx-auto grow flex items-center">
-        <LoginForm className="w-full" setKeys={setKeys}></LoginForm>
+      <div className="grid grid-cols-1 items-center lg:grid-cols-3 mt-5 mx-5">
+        <LoginForm
+          className="w-full lg:col-start-2"
+          setKeys={setKeys}
+        ></LoginForm>
       </div>
     );
   }
@@ -161,12 +180,12 @@ export default function SPA() {
   if (!factionIds) {
     return (
       <>
-        <div className="container mx-auto grow flex items-center">
+        <div className="grid grid-cols-1 justify-items-end mt-5 mx-5">
           <Button onClick={logout}>Logout</Button>
         </div>
-        <div className="container mx-auto grow flex items-center">
+        <div className="grid grid-cols-1 items-center lg:grid-cols-3 mt-5 mx-5">
           <FactionInputForm
-            className="w-full"
+            className="w-full lg:col-start-2"
             setFactionIds={setFactionIds}
           ></FactionInputForm>
         </div>
