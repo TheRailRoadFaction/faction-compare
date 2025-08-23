@@ -253,6 +253,7 @@ export function MyChart({
               data={left_data}
               margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
               onClick={handleChartClick(setLeftSelected, setLeftNameSelected)}
+              style={{ cursor: "pointer" }}
             >
               <XAxis
                 dataKey="name"
@@ -302,6 +303,7 @@ export function MyChart({
               data={right_data}
               margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
               onClick={handleChartClick(setRightSelected, setRightNameSelected)}
+              style={{ cursor: "pointer" }}
             >
               <XAxis
                 dataKey="name"
@@ -351,6 +353,7 @@ export function MyChart({
               data={left_data}
               margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
               onClick={handleChartClick(setLeftSelected, setLeftNameSelected)}
+              style={{ cursor: "pointer" }}
             >
               <XAxis
                 dataKey="name"
@@ -400,6 +403,7 @@ export function MyChart({
               data={right_data}
               margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
               onClick={handleChartClick(setRightSelected, setRightNameSelected)}
+              style={{ cursor: "pointer" }}
             >
               <XAxis
                 dataKey="name"
