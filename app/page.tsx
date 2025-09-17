@@ -1,16 +1,18 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { LoginForm } from "./login-form";
 import {
   FFScouterResult,
   keys,
   factionIds,
   TornFactionBasicApi,
+  factionWarId,
 } from "./types";
 import { Loader } from "lucide-react";
 import { MyChart } from "./chart";
 import { Button } from "@/components/ui/button";
 import { FactionInputForm } from "./faction-input-form";
+import { FactionWarInputForm } from "./faction-war-input-form";
 
 const getKeys = (): keys | undefined => {
   // We need this because window / localstorage might not exist as fast yet (for the first mount)
@@ -60,6 +62,7 @@ const getFactionIds = (): factionIds | undefined => {
 export default function SPA() {
   const [keys, setKeys] = useState<keys>();
   const [factionIds, setFactionIds] = useState<factionIds>();
+  const [factionWarId, setFactionWarId] = useState<factionWarId>();
   const [rightFFScouterData, setRightFFScouterData] =
     useState<FFScouterResult>();
   //make sure to pass types here just as above
@@ -68,6 +71,24 @@ export default function SPA() {
     useState<TornFactionBasicApi>();
   const [rightFactionBasic, setRightFactionBasic] =
     useState<TornFactionBasicApi>();
+
+  const setFactionIdsPersist = (i: factionIds | undefined) => {
+    setFactionIds(i);
+    if (!i) {
+      localStorage.removeItem("factionIds");
+      return;
+    }
+    localStorage.setItem("factionIds", JSON.stringify(i));
+  };
+
+  const setFactionWarIdPersist = (i: factionWarId | undefined) => {
+    setFactionWarId(i);
+    if (!i) {
+      localStorage.removeItem("factionWarId");
+      return;
+    }
+    localStorage.setItem("factionWarId", JSON.stringify(i));
+  };
 
   //we need this because it should run after each time the component updates, or in this case, when window gets mounted.
   //thats the cleanest way of doing things i think
@@ -81,14 +102,67 @@ export default function SPA() {
     setKeys(undefined);
   };
 
-  const reset = () => {
-    localStorage.removeItem("factionIds");
-    setFactionIds(undefined);
+  const reset = useCallback(() => {
+    setFactionIdsPersist(undefined);
+    setFactionWarIdPersist(undefined);
     setLeftFFScouterData(undefined);
     setRightFFScouterData(undefined);
     setLeftFactionBasic(undefined);
     setRightFactionBasic(undefined);
-  };
+  }, []);
+
+  useEffect(() => {
+    if (!keys || !factionWarId) {
+      return;
+    }
+    const queryString = new URLSearchParams({
+      selections: "basic",
+      key: keys.publicKey,
+    });
+    fetch(
+      "https://api.torn.com/faction/" +
+        factionWarId.factionWarId +
+        "?" +
+        queryString.toString(),
+    )
+      .then((res) => res.json())
+      .then((value) => TornFactionBasicApi.parse(value))
+      .then((value: TornFactionBasicApi) => {
+        if (!value.ranked_wars) {
+          reset();
+          return;
+        }
+        console.log(value.ranked_wars);
+        let found = false;
+        for (const warId in value.ranked_wars) {
+          found = true;
+          const war = value.ranked_wars[warId];
+          if (!war || !war.factions) {
+            reset();
+            return;
+          }
+          const ids = [];
+          for (const factionId in war.factions) {
+            ids.push(factionId);
+          }
+          if (ids.length != 2) {
+            reset();
+            return;
+          }
+          setFactionIdsPersist({
+            leftFactionId: ids[0],
+            rightFactionId: ids[1],
+          });
+        }
+        if (!found) {
+          reset();
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        reset();
+      }); // TODO: Tell them something
+  }, [keys, factionWarId, reset]);
 
   useEffect(() => {
     if (!keys || !factionIds) {
@@ -125,7 +199,7 @@ export default function SPA() {
         console.log(e);
         reset();
       }); // TODO: Tell them something
-  }, [keys, factionIds]);
+  }, [keys, factionIds, reset]);
 
   //run this every time keys changes
   useEffect(() => {
@@ -145,7 +219,7 @@ export default function SPA() {
         console.log(e);
         reset();
       }); // TODO: Tell them something
-  }, [keys, leftFactionBasic]);
+  }, [keys, leftFactionBasic, reset]);
 
   useEffect(() => {
     if (!keys || !rightFactionBasic) {
@@ -164,7 +238,7 @@ export default function SPA() {
         console.log(e);
         reset();
       }); // TODO: Tell them something
-  }, [keys, rightFactionBasic]);
+  }, [keys, rightFactionBasic, reset]);
 
   if (!keys) {
     return (
@@ -177,7 +251,7 @@ export default function SPA() {
     );
   }
 
-  if (!factionIds) {
+  if (!factionIds && !factionWarId) {
     return (
       <>
         <div className="grid grid-cols-1 justify-items-end mt-5 mx-5">
@@ -186,8 +260,14 @@ export default function SPA() {
         <div className="grid grid-cols-1 items-center lg:grid-cols-3 mt-5 mx-5">
           <FactionInputForm
             className="w-full lg:col-start-2"
-            setFactionIds={setFactionIds}
+            setFactionIds={setFactionIdsPersist}
           ></FactionInputForm>
+        </div>
+        <div className="grid grid-cols-1 items-center lg:grid-cols-3 mt-5 mx-5">
+          <FactionWarInputForm
+            className="w-full lg:col-start-2"
+            setFactionWarId={setFactionWarIdPersist}
+          ></FactionWarInputForm>
         </div>
       </>
     );

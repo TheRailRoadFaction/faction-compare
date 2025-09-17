@@ -20,41 +20,39 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { factionIds } from "./types";
+import { factionWarId } from "./types";
 
 const formSchema = z.object({
-  leftFactionId: z.string(),
-  rightFactionId: z.string(),
+  factionWarId: z.string(),
 });
 
-interface FactionInputFormProps extends React.ComponentProps<"div"> {
-  setFactionIds: (i: factionIds | undefined) => void;
+interface FactionWarInputFormProps extends React.ComponentProps<"div"> {
+  setFactionWarId: (i: factionWarId | undefined) => void;
 }
 
-export function FactionInputForm({
+export function FactionWarInputForm({
   className,
-  setFactionIds,
+  setFactionWarId,
   ...props
-}: FactionInputFormProps) {
+}: FactionWarInputFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      leftFactionId: "",
-      rightFactionId: "",
+      factionWarId: "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    setFactionIds(values);
+    setFactionWarId(values);
   }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Enter faction IDs to compare</CardTitle>
+          <CardTitle>Enter Faction ID to compare current war</CardTitle>
           <CardDescription>
-            Enter two faction IDs to compare members of
+            Enter faction id to compare current warring factions
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -62,23 +60,10 @@ export function FactionInputForm({
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
-                name="leftFactionId"
+                name="factionWarId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Left Faction ID</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="rightFactionId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Right Faction ID</FormLabel>
+                    <FormLabel>Faction ID</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>

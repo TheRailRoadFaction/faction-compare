@@ -3,6 +3,7 @@ import * as z from "zod";
 
 export type keys = { ffScouterKey: string; publicKey: string };
 export type factionIds = { leftFactionId: string; rightFactionId: string };
+export type factionWarId = { factionWarId: string };
 
 export class FairFightScore {
   name: string;
