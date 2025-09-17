@@ -26,7 +26,7 @@ const getKeys = (): keys | undefined => {
   }
   try {
     const j = JSON.parse(v) as keys;
-    if (j.ffScouterKey && j.publicKey) {
+    if (j.ffScouterKey) {
       return j;
     }
   } catch (e) {
@@ -117,7 +117,7 @@ export default function SPA() {
     }
     const queryString = new URLSearchParams({
       selections: "basic",
-      key: keys.publicKey,
+      key: keys.ffScouterKey,
     });
     fetch(
       "https://api.torn.com/faction/" +
@@ -170,7 +170,7 @@ export default function SPA() {
     }
     const queryString = new URLSearchParams({
       selections: "basic",
-      key: keys.publicKey,
+      key: keys.ffScouterKey,
     });
     fetch(
       "https://api.torn.com/faction/" +

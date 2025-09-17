@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import * as z from "zod";
 
-export type keys = { ffScouterKey: string; publicKey: string };
+export type keys = { ffScouterKey: string };
 export type factionIds = { leftFactionId: string; rightFactionId: string };
 export type factionWarId = { factionWarId: string };
 

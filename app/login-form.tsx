@@ -27,7 +27,6 @@ import { keys } from "./types";
 
 const formSchema = z.object({
   ffScouterKey: z.string().min(16).max(16),
-  publicKey: z.string().min(16).max(16),
 });
 
 interface LoginFormProps extends React.ComponentProps<"div"> {
@@ -39,7 +38,6 @@ export function LoginForm({ className, setKeys, ...props }: LoginFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       ffScouterKey: "",
-      publicKey: "",
     },
   });
 
@@ -52,10 +50,7 @@ export function LoginForm({ className, setKeys, ...props }: LoginFormProps) {
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Enter two API keys</CardTitle>
-          <CardDescription>
-            Enter FF Scouter key and Public Torn API key
-          </CardDescription>
+          <CardTitle>Enter FF Scouter API keys</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -71,22 +66,6 @@ export function LoginForm({ className, setKeys, ...props }: LoginFormProps) {
                     </FormControl>
                     <FormDescription>
                       This is the key you signed up with at FF Scouter.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="publicKey"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Public API Key</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      This is your Torn API public Key.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
