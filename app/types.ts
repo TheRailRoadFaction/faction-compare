@@ -8,8 +8,10 @@ export type factionWarId = { factionWarId: string };
 export class FairFightScore {
   name: string;
   id: string;
-  attacker_ff: number | null;
-  defender_ff: number | null;
+  attacker_ff: number | null = null;
+  defender_ff: number | null = null;
+  attacker_ff_str: string | null = null;
+  defender_ff_str: string | null = null;
   bss_public: number | null;
   bs_estimate_human: string | null;
   constructor(
@@ -23,16 +25,11 @@ export class FairFightScore {
     this.id = id;
     this.bss_public = opponent_battle_score;
     this.bs_estimate_human = bs_estimate_human;
-    if (battle_score == null || opponent_battle_score == null) {
-      this.attacker_ff = null;
-      this.defender_ff = null;
-    } else {
-      this.attacker_ff =
-        Math.trunc(1 + (8 / 3) * (opponent_battle_score / battle_score) * 100) /
-        100;
-      this.defender_ff =
-        Math.trunc(1 + (8 / 3) * (battle_score / opponent_battle_score) * 100) /
-        100;
+    if (battle_score != null && opponent_battle_score != null) {
+      this.attacker_ff = 1 + (8 / 3) * (opponent_battle_score / battle_score);
+      this.defender_ff = 1 + (8 / 3) * (battle_score / opponent_battle_score);
+      this.attacker_ff_str = this.attacker_ff.toFixed(2);
+      this.defender_ff_str = this.defender_ff.toFixed(2);
     }
   }
 }
@@ -67,6 +64,8 @@ export interface DrillDownData {
   bs_estimate_human: string | null;
   attacker_ff: number | null;
   defender_ff: number | null;
+  attacker_ff_str: string | null;
+  defender_ff_str: string | null;
   easy_attack: number;
   possible_attack: number;
   hard_attack: number;
@@ -280,11 +279,11 @@ export const MemberColumns: ColumnDef<DrillDownData>[] = [
     header: "BS Est",
   },
   {
-    accessorKey: "attacker_ff",
+    accessorKey: "attacker_ff_str",
     header: "FF att",
   },
   {
-    accessorKey: "defender_ff",
+    accessorKey: "defender_ff_str",
     header: "FF def",
   },
 ];

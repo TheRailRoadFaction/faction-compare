@@ -102,6 +102,8 @@ export function MyChart({
         id: value.id,
         attacker_ff: value.attacker_ff,
         defender_ff: value.defender_ff,
+        attacker_ff_str: value.attacker_ff_str,
+        defender_ff_str: value.defender_ff_str,
         bss_public: value.bss_public,
         bs_estimate_human: value.bs_estimate_human,
         easy_attack:
