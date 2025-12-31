@@ -10,6 +10,7 @@ import {
   Area,
   CartesianGrid,
   ComposedChart,
+  Label,
   Legend,
   XAxis,
   YAxis,
@@ -268,7 +269,7 @@ export function MyChart({
               <ChartContainer config={chartConfig}>
                 <ComposedChart
                   data={left_data}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
                   onClick={handleChartClick(
                     setLeftSelected,
                     setLeftNameSelected,
@@ -281,7 +282,9 @@ export function MyChart({
                     textAnchor="end"
                     interval="equidistantPreserveStart"
                   />
-                  <YAxis label="count" />
+                  <YAxis>
+                    <Label value="count" angle={-90} />
+                  </YAxis>
                   <Legend verticalAlign="top" />
                   <CartesianGrid strokeDasharray="3 3" />
                   <Area
@@ -321,7 +324,7 @@ export function MyChart({
               <ChartContainer config={chartConfig}>
                 <ComposedChart
                   data={right_data}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
                   onClick={handleChartClick(
                     setRightSelected,
                     setRightNameSelected,
@@ -334,7 +337,9 @@ export function MyChart({
                     textAnchor="end"
                     interval="equidistantPreserveStart"
                   />
-                  <YAxis label="count" />
+                  <YAxis>
+                    <Label value="count" angle={-90} />
+                  </YAxis>
                   <Legend verticalAlign="top" />
                   <CartesianGrid strokeDasharray="3 3" />
                   <Area
@@ -374,7 +379,7 @@ export function MyChart({
               <ChartContainer config={chartConfig}>
                 <ComposedChart
                   data={left_data}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
                   onClick={handleChartClick(
                     setLeftSelected,
                     setLeftNameSelected,
@@ -387,7 +392,9 @@ export function MyChart({
                     textAnchor="end"
                     interval="equidistantPreserveStart"
                   />
-                  <YAxis label="count" />
+                  <YAxis>
+                    <Label value="count" angle={-90} />
+                  </YAxis>
                   <Legend verticalAlign="top" />
                   <CartesianGrid strokeDasharray="3 3" />
                   <Area
@@ -427,7 +434,7 @@ export function MyChart({
               <ChartContainer config={chartConfig}>
                 <ComposedChart
                   data={right_data}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
                   onClick={handleChartClick(
                     setRightSelected,
                     setRightNameSelected,
@@ -440,7 +447,9 @@ export function MyChart({
                     textAnchor="end"
                     interval="equidistantPreserveStart"
                   />
-                  <YAxis label="count" />
+                  <YAxis>
+                    <Label value="count" angle={-90} />
+                  </YAxis>
                   <Legend verticalAlign="top" />
                   <CartesianGrid strokeDasharray="3 3" />
                   <Area
@@ -522,7 +531,7 @@ export function MyChart({
               <ChartContainer config={chartConfig}>
                 <ComposedChart
                   data={leftSelected}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
                 >
                   <XAxis
                     xAxisId="name"
@@ -560,7 +569,7 @@ export function MyChart({
               <ChartContainer config={chartConfig}>
                 <ComposedChart
                   data={leftSelected}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
                 >
                   <XAxis
                     xAxisId="name"
@@ -598,7 +607,7 @@ export function MyChart({
               <ChartContainer config={chartConfig}>
                 <ComposedChart
                   data={rightSelected}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
                 >
                   <XAxis
                     xAxisId="name"
@@ -636,7 +645,7 @@ export function MyChart({
               <ChartContainer config={chartConfig}>
                 <ComposedChart
                   data={rightSelected}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
                 >
                   <XAxis
                     xAxisId="name"
