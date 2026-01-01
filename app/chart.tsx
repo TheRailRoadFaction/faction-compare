@@ -324,6 +324,50 @@ export function MyChart({
     );
   }
 
+  function InnerMemberChartContainer({
+    data,
+    name,
+    chartType,
+  }: {
+    data: DrillDownData[];
+    name: string;
+    chartType: ChartType;
+  }) {
+    return (
+      <ChartContainer config={chartConfig}>
+        <ComposedChart
+          data={data}
+          margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
+        >
+          <XAxis
+            xAxisId="name"
+            label="name"
+            dataKey="name"
+            angle={-45}
+            textAnchor="end"
+            interval="equidistantPreserveStart"
+          />
+          <YAxis
+            yAxisId={chartType == ChartType.attack ? "attacker" : "defender"}
+            domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
+            allowDataOverflow
+          />
+          <Legend verticalAlign="top" />
+          <CartesianGrid strokeDasharray="3 3" />
+          <Area
+            xAxisId="name"
+            yAxisId={chartType == ChartType.attack ? "attacker" : "defender"}
+            dataKey="attacker_ff"
+            name={"FF of " + name}
+            fill="#666600"
+            stroke="#666600"
+          />
+          <ChartTooltip content={<ChartTooltipContent />} />
+        </ComposedChart>
+      </ChartContainer>
+    );
+  }
+
   return (
     <>
       <Tabs defaultValue="faction_charts">
@@ -438,37 +482,11 @@ export function MyChart({
               <CardTitle>FF as attacker ({leftNameSelected})</CardTitle>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig}>
-                <ComposedChart
-                  data={leftSelected}
-                  margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
-                >
-                  <XAxis
-                    xAxisId="name"
-                    label="name"
-                    dataKey="name"
-                    angle={-45}
-                    textAnchor="end"
-                    interval="equidistantPreserveStart"
-                  />
-                  <YAxis
-                    yAxisId="attacker"
-                    domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
-                    allowDataOverflow
-                  />
-                  <Legend verticalAlign="top" />
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <Area
-                    xAxisId="name"
-                    yAxisId="attacker"
-                    dataKey="attacker_ff"
-                    name={"FF of " + leftNameSelected}
-                    fill="#666600"
-                    stroke="#666600"
-                  />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                </ComposedChart>
-              </ChartContainer>
+              <InnerMemberChartContainer
+                data={leftSelected}
+                chartType={ChartType.attack}
+                name={leftNameSelected}
+              />
             </CardContent>
           </Card>
           <Card className="col-span-2 lg:col-span-1">
@@ -476,37 +494,11 @@ export function MyChart({
               <CardTitle>FF as defender ({leftNameSelected})</CardTitle>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig}>
-                <ComposedChart
-                  data={leftSelected}
-                  margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
-                >
-                  <XAxis
-                    xAxisId="name"
-                    label="name"
-                    dataKey="name"
-                    angle={-45}
-                    textAnchor="end"
-                    interval="equidistantPreserveStart"
-                  />
-                  <YAxis
-                    yAxisId="defender"
-                    domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
-                    allowDataOverflow
-                  />
-                  <Legend verticalAlign="top" />
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <Area
-                    xAxisId="name"
-                    yAxisId="defender"
-                    dataKey="defender_ff"
-                    name="FF of attacker"
-                    fill="#006666"
-                    stroke="#006666"
-                  />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                </ComposedChart>
-              </ChartContainer>
+              <InnerMemberChartContainer
+                data={leftSelected}
+                chartType={ChartType.defend}
+                name={leftNameSelected}
+              />
             </CardContent>
           </Card>
           <Card className="col-span-2 lg:col-span-1">
@@ -514,37 +506,11 @@ export function MyChart({
               <CardTitle>FF as attacker ({rightNameSelected})</CardTitle>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig}>
-                <ComposedChart
-                  data={rightSelected}
-                  margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
-                >
-                  <XAxis
-                    xAxisId="name"
-                    label="name"
-                    dataKey="name"
-                    angle={-45}
-                    textAnchor="end"
-                    interval="equidistantPreserveStart"
-                  />
-                  <YAxis
-                    yAxisId="attacker"
-                    domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
-                    allowDataOverflow
-                  />
-                  <Legend verticalAlign="top" />
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <Area
-                    xAxisId="name"
-                    yAxisId="attacker"
-                    name={"FF of " + rightNameSelected}
-                    dataKey="attacker_ff"
-                    fill="#666600"
-                    stroke="#666600"
-                  />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                </ComposedChart>
-              </ChartContainer>
+              <InnerMemberChartContainer
+                data={rightSelected}
+                chartType={ChartType.attack}
+                name={rightNameSelected}
+              />
             </CardContent>
           </Card>
           <Card className="col-span-2 lg:col-span-1">
@@ -552,37 +518,11 @@ export function MyChart({
               <CardTitle>FF as defender ({rightNameSelected})</CardTitle>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig}>
-                <ComposedChart
-                  data={rightSelected}
-                  margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
-                >
-                  <XAxis
-                    xAxisId="name"
-                    label="name"
-                    dataKey="name"
-                    angle={-45}
-                    textAnchor="end"
-                    interval="equidistantPreserveStart"
-                  />
-                  <YAxis
-                    yAxisId="defender"
-                    domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
-                    allowDataOverflow
-                  />
-                  <Legend verticalAlign="top" />
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <Area
-                    xAxisId="name"
-                    yAxisId="defender"
-                    dataKey="defender_ff"
-                    name="FF of attacker"
-                    fill="#006666"
-                    stroke="#006666"
-                  />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                </ComposedChart>
-              </ChartContainer>
+              <InnerMemberChartContainer
+                data={rightSelected}
+                chartType={ChartType.defend}
+                name={rightNameSelected}
+              />
             </CardContent>
           </Card>
         </TabsContent>
