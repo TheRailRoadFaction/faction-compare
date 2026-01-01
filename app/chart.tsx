@@ -8,6 +8,7 @@ import {
 import { useState, Dispatch, SetStateAction } from "react";
 import {
   Area,
+  AreaChart,
   CartesianGrid,
   ComposedChart,
   Label,
@@ -290,10 +291,13 @@ export function MyChart({
     ];
 
     return (
-      <ChartContainer config={chartConfig}>
-        <ComposedChart
+      <ChartContainer
+        config={chartConfig}
+        className="aspect-auto lg:h-[500px] h-[250px] w-full"
+      >
+        <AreaChart
           data={data}
-          margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
+          margin={{ bottom: 60 }}
           onClick={onClick}
           style={{ cursor: "pointer" }}
         >
@@ -319,7 +323,7 @@ export function MyChart({
             />
           ))}
           <ChartTooltip content={<ChartTooltipContent />} />
-        </ComposedChart>
+        </AreaChart>
       </ChartContainer>
     );
   }
@@ -334,11 +338,11 @@ export function MyChart({
     chartType: ChartType;
   }) {
     return (
-      <ChartContainer config={chartConfig}>
-        <ComposedChart
-          data={data}
-          margin={{ top: 5, right: 5, left: 5, bottom: 60 }}
-        >
+      <ChartContainer
+        config={chartConfig}
+        className="aspect-auto lg:h-[500px] h-[250px] w-full"
+      >
+        <AreaChart data={data} margin={{ bottom: 60 }}>
           <XAxis
             xAxisId="name"
             label="name"
@@ -363,7 +367,7 @@ export function MyChart({
             stroke="#666600"
           />
           <ChartTooltip content={<ChartTooltipContent />} />
-        </ComposedChart>
+        </AreaChart>
       </ChartContainer>
     );
   }
