@@ -405,7 +405,7 @@ export function MyChart({
   return (
     <>
       <div className={cn("flex flex-col gap-6")}>
-        <Card>
+        <Card className="mt-5 mx-5">
           <CardHeader>
             <CardTitle>Change FF limits</CardTitle>
             <CardDescription>Set FF ranges for graphs</CardDescription>
@@ -423,45 +423,47 @@ export function MyChart({
                 )}
                 className="space-y-8"
               >
-                <FormField
-                  control={form.control}
-                  name="easy_ff_max"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Easy FF Max</FormLabel>
-                      <FormControl>
-                        <Input placeholder="2.5" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="possible_ff_max"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Possible FF Max</FormLabel>
-                      <FormControl>
-                        <Input placeholder="4.0" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="minimum_ff_target"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Minimum FF Target</FormLabel>
-                      <FormControl>
-                        <Input placeholder="1.75" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="md:flex mb-5">
+                  <FormField
+                    control={form.control}
+                    name="easy_ff_max"
+                    render={({ field }) => (
+                      <FormItem className="md:flex-1 md:mr-2.5">
+                        <FormLabel>Easy FF Max</FormLabel>
+                        <FormControl>
+                          <Input placeholder="2.5" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="possible_ff_max"
+                    render={({ field }) => (
+                      <FormItem className="md:flex-1 mt-5 md:mt-0 md:mx-2.5">
+                        <FormLabel>Possible FF Max</FormLabel>
+                        <FormControl>
+                          <Input placeholder="4.0" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="minimum_ff_target"
+                    render={({ field }) => (
+                      <FormItem className="md:flex-1 mt-5 md:mt-0 md:ml-2.5">
+                        <FormLabel>Minimum FF Target</FormLabel>
+                        <FormControl>
+                          <Input placeholder="1.75" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <Button type="submit">Submit</Button>
               </form>
             </Form>
