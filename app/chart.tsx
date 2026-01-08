@@ -50,6 +50,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ChevronsUpDown } from "lucide-react";
 
 enum ChartType {
   attack,
@@ -402,73 +408,87 @@ export function MyChart({
     },
   });
 
+  const [isFFLimitOpen, setIsFFLimitOpen] = useState(false);
+
   return (
     <>
       <div className={cn("flex flex-col gap-6")}>
-        <Card className="mt-5 mx-5">
-          <CardHeader>
-            <CardTitle>Change FF limits</CardTitle>
-            <CardDescription>Set FF ranges for graphs</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(
-                  (values: z.infer<typeof formSchema>) => {
-                    console.log(values);
-                    setEasyFFMax(values.easy_ff_max || 2.5);
-                    setPossibleFFMax(values.possible_ff_max || 4.0);
-                    setMinimumFFTarget(values.minimum_ff_target || 1.75);
-                  },
-                )}
-                className="space-y-8"
-              >
-                <div className="md:flex mb-5">
-                  <FormField
-                    control={form.control}
-                    name="easy_ff_max"
-                    render={({ field }) => (
-                      <FormItem className="md:flex-1 md:mr-2.5">
-                        <FormLabel>Easy FF Max</FormLabel>
-                        <FormControl>
-                          <Input placeholder="2.5" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+        <Collapsible open={isFFLimitOpen} onOpenChange={setIsFFLimitOpen}>
+          <Card className="mt-5 mx-5">
+            <CardHeader>
+              <div className="flex flex-col gap-1.5">
+                <CardTitle>Change FF limits</CardTitle>
+                <CardDescription>Set FF ranges for graphs</CardDescription>
+              </div>
+              <CollapsibleTrigger asChild data-slot="card-action">
+                <Button variant="ghost" size="icon" className="size-8">
+                  <ChevronsUpDown />
+                  <span className="sr-only">Toggle</span>
+                </Button>
+              </CollapsibleTrigger>
+            </CardHeader>
+            <CollapsibleContent>
+              <CardContent>
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(
+                      (values: z.infer<typeof formSchema>) => {
+                        console.log(values);
+                        setEasyFFMax(values.easy_ff_max || 2.5);
+                        setPossibleFFMax(values.possible_ff_max || 4.0);
+                        setMinimumFFTarget(values.minimum_ff_target || 1.75);
+                      },
                     )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="possible_ff_max"
-                    render={({ field }) => (
-                      <FormItem className="md:flex-1 mt-5 md:mt-0 md:mx-2.5">
-                        <FormLabel>Possible FF Max</FormLabel>
-                        <FormControl>
-                          <Input placeholder="4.0" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="minimum_ff_target"
-                    render={({ field }) => (
-                      <FormItem className="md:flex-1 mt-5 md:mt-0 md:ml-2.5">
-                        <FormLabel>Minimum FF Target</FormLabel>
-                        <FormControl>
-                          <Input placeholder="1.75" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <Button type="submit">Submit</Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
+                    className="space-y-8"
+                  >
+                    <div className="md:flex mb-5">
+                      <FormField
+                        control={form.control}
+                        name="easy_ff_max"
+                        render={({ field }) => (
+                          <FormItem className="md:flex-1 md:mr-2.5">
+                            <FormLabel>Easy FF Max</FormLabel>
+                            <FormControl>
+                              <Input placeholder="2.5" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="possible_ff_max"
+                        render={({ field }) => (
+                          <FormItem className="md:flex-1 mt-5 md:mt-0 md:mx-2.5">
+                            <FormLabel>Possible FF Max</FormLabel>
+                            <FormControl>
+                              <Input placeholder="4.0" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="minimum_ff_target"
+                        render={({ field }) => (
+                          <FormItem className="md:flex-1 mt-5 md:mt-0 md:ml-2.5">
+                            <FormLabel>Minimum FF Target</FormLabel>
+                            <FormControl>
+                              <Input placeholder="1.75" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <Button type="submit">Submit</Button>
+                  </form>
+                </Form>
+              </CardContent>
+            </CollapsibleContent>
+          </Card>
+        </Collapsible>
       </div>
       <Tabs defaultValue="faction_charts">
         <TabsList className="mt-5 mx-5">
