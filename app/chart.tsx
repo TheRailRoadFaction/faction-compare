@@ -1,4 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
@@ -30,9 +36,20 @@ import {
 import { CategoricalChartState } from "recharts/types/chart/types";
 import { DataTable } from "./data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-const EASY_BSS_MAX = 2.5;
-const POSSIBLE_BSS_MAX = 4.0;
+import { cn } from "@/lib/utils";
+import z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 enum ChartType {
   attack,
@@ -67,17 +84,20 @@ export function MyChart({
   leftfactionbasic,
   rightfactionbasic,
 }: ChartInterface) {
+  const [leftSelected, setLeftSelected] = useState<DrillDownData[]>([]);
+  const [leftNameSelected, setLeftNameSelected] = useState("");
+  const [rightSelected, setRightSelected] = useState<DrillDownData[]>([]);
+  const [rightNameSelected, setRightNameSelected] = useState("");
+  const [easyFFMax, setEasyFFMax] = useState<number>(2.5);
+  const [possibleFFMax, setPossibleFFMax] = useState<number>(4.0);
+  const [minimumFFTarget, setMinimumFFTarget] = useState<number>(1.75);
+
   const { left_data, right_data } = massage_data(
     leftffscouterdata,
     rightffscouterdata,
     leftfactionbasic,
     rightfactionbasic,
   );
-
-  const [leftSelected, setLeftSelected] = useState<DrillDownData[]>([]);
-  const [leftNameSelected, setLeftNameSelected] = useState("");
-  const [rightSelected, setRightSelected] = useState<DrillDownData[]>([]);
-  const [rightNameSelected, setRightNameSelected] = useState("");
 
   function handleChartClick(
     setter: Dispatch<SetStateAction<DrillDownData[]>>,
@@ -114,31 +134,27 @@ export function MyChart({
         bss_public: value.bss_public,
         bs_estimate_human: value.bs_estimate_human,
         easy_attack:
-          value.attacker_ff != null && value.attacker_ff <= EASY_BSS_MAX
-            ? 1
-            : 0,
+          value.attacker_ff != null && value.attacker_ff <= easyFFMax ? 1 : 0,
         possible_attack:
           value.attacker_ff != null &&
-          value.attacker_ff <= POSSIBLE_BSS_MAX &&
-          value.attacker_ff > EASY_BSS_MAX
+          value.attacker_ff <= possibleFFMax &&
+          value.attacker_ff > easyFFMax
             ? 1
             : 0,
         hard_attack:
-          value.attacker_ff != null && value.attacker_ff > POSSIBLE_BSS_MAX
+          value.attacker_ff != null && value.attacker_ff > possibleFFMax
             ? 1
             : 0,
         easy_defend:
-          value.defender_ff != null && value.defender_ff <= EASY_BSS_MAX
-            ? 1
-            : 0,
+          value.defender_ff != null && value.defender_ff <= easyFFMax ? 1 : 0,
         possible_defend:
           value.defender_ff != null &&
-          value.defender_ff <= POSSIBLE_BSS_MAX &&
-          value.defender_ff > EASY_BSS_MAX
+          value.defender_ff <= possibleFFMax &&
+          value.defender_ff > easyFFMax
             ? 1
             : 0,
         hard_defend:
-          value.defender_ff != null && value.defender_ff > POSSIBLE_BSS_MAX
+          value.defender_ff != null && value.defender_ff > possibleFFMax
             ? 1
             : 0,
       };
@@ -190,32 +206,31 @@ export function MyChart({
         const lists = {
           easy_attacks: opponent_scores.filter(
             (value) =>
-              value.attacker_ff != null && value.attacker_ff <= EASY_BSS_MAX,
+              value.attacker_ff != null && value.attacker_ff <= easyFFMax,
           ),
           possible_attacks: opponent_scores.filter(
             (value) =>
               value.attacker_ff != null &&
-              value.attacker_ff <= POSSIBLE_BSS_MAX &&
-              value.attacker_ff > EASY_BSS_MAX,
+              value.attacker_ff <= possibleFFMax &&
+              value.attacker_ff > easyFFMax,
           ),
           hard_attacks: opponent_scores.filter(
             (value) =>
-              value.attacker_ff != null && value.attacker_ff > POSSIBLE_BSS_MAX,
+              value.attacker_ff != null && value.attacker_ff > possibleFFMax,
           ),
           easy_defends: opponent_scores.filter(
             (value) =>
-              value.defender_ff != null &&
-              value.defender_ff >= POSSIBLE_BSS_MAX,
+              value.defender_ff != null && value.defender_ff >= possibleFFMax,
           ),
           possible_defends: opponent_scores.filter(
             (value) =>
               value.defender_ff != null &&
-              value.defender_ff < POSSIBLE_BSS_MAX &&
-              value.defender_ff >= EASY_BSS_MAX,
+              value.defender_ff < possibleFFMax &&
+              value.defender_ff >= easyFFMax,
           ),
           hard_defends: opponent_scores.filter(
             (value) =>
-              value.defender_ff != null && value.defender_ff < EASY_BSS_MAX,
+              value.defender_ff != null && value.defender_ff < easyFFMax,
           ),
         };
         return {
@@ -353,7 +368,7 @@ export function MyChart({
           />
           <YAxis
             yAxisId={chartType == ChartType.attack ? "attacker" : "defender"}
-            domain={[EASY_BSS_MAX - 0.3, POSSIBLE_BSS_MAX + 0.3]}
+            domain={[minimumFFTarget, possibleFFMax + 0.3]}
             allowDataOverflow
           />
           <Legend verticalAlign="top" />
@@ -372,8 +387,87 @@ export function MyChart({
     );
   }
 
+  const formSchema = z.object({
+    easy_ff_max: z.coerce.number<number>(),
+    possible_ff_max: z.coerce.number<number>(),
+    minimum_ff_target: z.coerce.number<number>(),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      easy_ff_max: 2.5,
+      possible_ff_max: 4.0,
+      minimum_ff_target: 1.75,
+    },
+  });
+
   return (
     <>
+      <div className={cn("flex flex-col gap-6")}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Change FF limits</CardTitle>
+            <CardDescription>Set FF ranges for graphs</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(
+                  (values: z.infer<typeof formSchema>) => {
+                    console.log(values);
+                    setEasyFFMax(values.easy_ff_max || 2.5);
+                    setPossibleFFMax(values.possible_ff_max || 4.0);
+                    setMinimumFFTarget(values.minimum_ff_target || 1.75);
+                  },
+                )}
+                className="space-y-8"
+              >
+                <FormField
+                  control={form.control}
+                  name="easy_ff_max"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Easy FF Max</FormLabel>
+                      <FormControl>
+                        <Input placeholder="2.5" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="possible_ff_max"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Possible FF Max</FormLabel>
+                      <FormControl>
+                        <Input placeholder="4.0" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="minimum_ff_target"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Minimum FF Target</FormLabel>
+                      <FormControl>
+                        <Input placeholder="1.75" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit">Submit</Button>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      </div>
       <Tabs defaultValue="faction_charts">
         <TabsList className="mt-5 mx-5">
           <TabsTrigger value="faction_charts">Faction Charts</TabsTrigger>
