@@ -19,6 +19,7 @@ import {
   ComposedChart,
   Label,
   Legend,
+  Line,
   XAxis,
   YAxis,
 } from "recharts";
@@ -76,6 +77,7 @@ const chartConfig = {
 const EASY_COLOR = "#226600";
 const POSSIBLE_COLOR = "#aab000";
 const HARD_COLOR = "#ff9933";
+const TARGETS_COLOR = "#0066FF";
 
 interface ChartInterface {
   leftffscouterdata: FFScouterResult;
@@ -125,7 +127,7 @@ function InnerFactionChartContainer({
       config={chartConfig}
       className="aspect-auto lg:h-[500px] h-[250px] w-full"
     >
-      <AreaChart
+      <ComposedChart
         data={data}
         margin={{ bottom: 60 }}
         onClick={onClick}
@@ -152,8 +154,14 @@ function InnerFactionChartContainer({
             dataKey={s.dataKey}
           />
         ))}
+        <Line
+          dataKey={`targets_${chartType == ChartType.attack ? "attacks" : "defends"}_count`}
+          name={`${chartType == ChartType.attack ? "Targets" : "Attackers"}`}
+          stroke={TARGETS_COLOR}
+          dot={false}
+        />
         <ChartTooltip content={<ChartTooltipContent />} />
-      </AreaChart>
+      </ComposedChart>
     </ChartContainer>
   );
 }
@@ -307,6 +315,18 @@ export function MyChart({
             (value) =>
               value.defender_ff != null && value.defender_ff < easyFFMax,
           ),
+          targets_attacks: opponent_scores.filter(
+            (value) =>
+              value.attacker_ff != null &&
+              value.attacker_ff >= minimumFFTarget &&
+              value.attacker_ff < possibleFFMax,
+          ),
+          targets_defends: opponent_scores.filter(
+            (value) =>
+              value.defender_ff != null &&
+              value.defender_ff >= minimumFFTarget &&
+              value.defender_ff < possibleFFMax,
+          ),
         };
         return {
           name: member?.name ?? "Unknown",
@@ -327,6 +347,10 @@ export function MyChart({
           possible_defends_count: lists.possible_defends.length,
           hard_defends: lists.hard_defends,
           hard_defends_count: lists.hard_defends.length,
+          targets_attacks: lists.targets_attacks,
+          targets_attacks_count: lists.targets_attacks.length,
+          targets_defends: lists.targets_defends,
+          targets_defends_count: lists.targets_defends.length,
         };
       };
     };
