@@ -11,7 +11,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, Dispatch, SetStateAction, useMemo } from "react";
 import {
   Area,
   AreaChart,
@@ -84,6 +84,80 @@ interface ChartInterface {
   rightfactionbasic: TornFactionBasicApi;
 }
 
+function InnerFactionChartContainer({
+  data,
+  chartType,
+  onClick,
+}: {
+  data: GraphData[];
+  chartType: ChartType;
+  onClick: (nextState: CategoricalChartState) => void;
+}) {
+  const series = [
+    {
+      key: "easy",
+      name: "Easy",
+      stackId: "counts",
+      fill: EASY_COLOR,
+      stroke: EASY_COLOR,
+      dataKey: `easy_${chartType == ChartType.attack ? "attacks" : "defends"}_count`,
+    },
+    {
+      key: "possible",
+      name: "Possible",
+      stackId: "counts",
+      fill: POSSIBLE_COLOR,
+      stroke: POSSIBLE_COLOR,
+      dataKey: `possible_${chartType == ChartType.attack ? "attacks" : "defends"}_count`,
+    },
+    {
+      key: "impossible",
+      name: "Impossible",
+      stackId: "counts",
+      fill: HARD_COLOR,
+      stroke: HARD_COLOR,
+      dataKey: `hard_${chartType == ChartType.attack ? "attacks" : "defends"}_count`,
+    },
+  ];
+
+  return (
+    <ChartContainer
+      config={chartConfig}
+      className="aspect-auto lg:h-[500px] h-[250px] w-full"
+    >
+      <AreaChart
+        data={data}
+        margin={{ bottom: 60 }}
+        onClick={onClick}
+        style={{ cursor: "pointer" }}
+      >
+        <XAxis
+          dataKey="name"
+          angle={-45}
+          textAnchor="end"
+          interval="equidistantPreserveStart"
+        />
+        <YAxis>
+          <Label value="count" angle={-90} />
+        </YAxis>
+        <Legend verticalAlign="top" />
+        <CartesianGrid strokeDasharray="3 3" />
+        {series.map((s) => (
+          <Area
+            key={s.key}
+            name={s.name}
+            stackId={s.stackId}
+            fill={s.fill}
+            stroke={s.stroke}
+            dataKey={s.dataKey}
+          />
+        ))}
+        <ChartTooltip content={<ChartTooltipContent />} />
+      </AreaChart>
+    </ChartContainer>
+  );
+}
+
 export function MyChart({
   leftffscouterdata,
   rightffscouterdata,
@@ -97,13 +171,6 @@ export function MyChart({
   const [easyFFMax, setEasyFFMax] = useState<number>(2.5);
   const [possibleFFMax, setPossibleFFMax] = useState<number>(4.0);
   const [minimumFFTarget, setMinimumFFTarget] = useState<number>(1.75);
-
-  const { left_data, right_data } = massage_data(
-    leftffscouterdata,
-    rightffscouterdata,
-    leftfactionbasic,
-    rightfactionbasic,
-  );
 
   function handleChartClick(
     setter: Dispatch<SetStateAction<DrillDownData[]>>,
@@ -172,6 +239,8 @@ export function MyChart({
     rightffscouterdata: FFScouterResult,
     leftfactiondata: TornFactionBasicApi,
     rightfactiondata: TornFactionBasicApi,
+    easyFFMax: number,
+    possibleFFMax: number,
   ): { left_data: GraphData[]; right_data: GraphData[] } {
     const sort_function = (a: FFScouterJson, b: FFScouterJson) => {
       if (a.bss_public == null && b.bss_public == null) {
@@ -275,79 +344,25 @@ export function MyChart({
     return { left_data: left_data, right_data: right_data };
   }
 
-  function InnerFactionChartContainer({
-    data,
-    chartType,
-    onClick,
-  }: {
-    data: GraphData[];
-    chartType: ChartType;
-    onClick: ReturnType<typeof handleChartClick>;
-  }) {
-    const series = [
-      {
-        key: "easy",
-        name: "Easy",
-        stackId: "counts",
-        fill: EASY_COLOR,
-        stroke: EASY_COLOR,
-        dataKey: `easy_${chartType == ChartType.attack ? "attacks" : "defends"}_count`,
-      },
-      {
-        key: "possible",
-        name: "Possible",
-        stackId: "counts",
-        fill: POSSIBLE_COLOR,
-        stroke: POSSIBLE_COLOR,
-        dataKey: `possible_${chartType == ChartType.attack ? "attacks" : "defends"}_count`,
-      },
-      {
-        key: "impossible",
-        name: "Impossible",
-        stackId: "counts",
-        fill: HARD_COLOR,
-        stroke: HARD_COLOR,
-        dataKey: `hard_${chartType == ChartType.attack ? "attacks" : "defends"}_count`,
-      },
-    ];
-
-    return (
-      <ChartContainer
-        config={chartConfig}
-        className="aspect-auto lg:h-[500px] h-[250px] w-full"
-      >
-        <AreaChart
-          data={data}
-          margin={{ bottom: 60 }}
-          onClick={onClick}
-          style={{ cursor: "pointer" }}
-        >
-          <XAxis
-            dataKey="name"
-            angle={-45}
-            textAnchor="end"
-            interval="equidistantPreserveStart"
-          />
-          <YAxis>
-            <Label value="count" angle={-90} />
-          </YAxis>
-          <Legend verticalAlign="top" />
-          <CartesianGrid strokeDasharray="3 3" />
-          {series.map((s) => (
-            <Area
-              key={s.key}
-              name={s.name}
-              stackId={s.stackId}
-              fill={s.fill}
-              stroke={s.stroke}
-              dataKey={s.dataKey}
-            />
-          ))}
-          <ChartTooltip content={<ChartTooltipContent />} />
-        </AreaChart>
-      </ChartContainer>
-    );
-  }
+  const { left_data, right_data } = useMemo(
+    () =>
+      massage_data(
+        leftffscouterdata,
+        rightffscouterdata,
+        leftfactionbasic,
+        rightfactionbasic,
+        easyFFMax,
+        possibleFFMax,
+      ),
+    [
+      leftffscouterdata,
+      rightffscouterdata,
+      leftfactionbasic,
+      rightfactionbasic,
+      easyFFMax,
+      possibleFFMax,
+    ],
+  );
 
   function InnerMemberChartContainer({
     data,
