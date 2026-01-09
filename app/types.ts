@@ -249,7 +249,7 @@ export const FactionColumns: ColumnDef<GraphData>[] = [
   },
   {
     accessorKey: "possible_attacks_count",
-    header: "Possible att",
+    header: "Poss att",
   },
   {
     accessorKey: "hard_attacks_count",
@@ -261,11 +261,19 @@ export const FactionColumns: ColumnDef<GraphData>[] = [
   },
   {
     accessorKey: "possible_defends_count",
-    header: "Possible def",
+    header: "Poss def",
   },
   {
     accessorKey: "hard_defends_count",
     header: "Hard def",
+  },
+  {
+    accessorKey: "targets_attacks_count",
+    header: "Targets",
+  },
+  {
+    accessorKey: "targets_defends_count",
+    header: "Attackers",
   },
 ];
 
