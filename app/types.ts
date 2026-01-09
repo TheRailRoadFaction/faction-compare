@@ -139,7 +139,7 @@ export const TornFactionBasicApi = z.object({
   age: z.number(),
   capacity: z.number(),
   best_chain: z.number(),
-  territory_wars: z.object(),
+  //territory_wars: z.object(),
   raid_wars: z.object(),
   peace: z.object(),
   rank: z.object({
