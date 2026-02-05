@@ -263,8 +263,10 @@ export function MyChart({
       return a.bss_public - b.bss_public;
     };
     // factions sorted by lower BSS to highest
-    const sorted_left = leftffscouterdata.toSorted(sort_function);
-    const sorted_right = rightffscouterdata.toSorted(sort_function);
+    const sorted_left: FFScouterJson[] =
+      leftffscouterdata.toSorted(sort_function);
+    const sorted_right: FFScouterJson[] =
+      rightffscouterdata.toSorted(sort_function);
 
     const map_data = (
       primaryfaction: TornFactionBasicApi,
@@ -355,12 +357,21 @@ export function MyChart({
       };
     };
 
-    const left_data: GraphData[] = sorted_left.map(
-      map_data(leftfactiondata, rightfactiondata, sorted_right),
-    );
-    const right_data: GraphData[] = sorted_right.map(
-      map_data(rightfactiondata, leftfactiondata, sorted_left),
-    );
+    const no_unavailable = (faction: TornFactionBasicApi) => {
+      return (item: FFScouterJson) => {
+        const member = faction.members["" + item.player_id];
+        return (
+          member.status.state != "Fallen" && member.status.state != "Federal"
+        );
+      };
+    };
+
+    const left_data: GraphData[] = sorted_left
+      .filter(no_unavailable(leftfactiondata))
+      .map(map_data(leftfactiondata, rightfactiondata, sorted_right));
+    const right_data: GraphData[] = sorted_right
+      .filter(no_unavailable(rightfactiondata))
+      .map(map_data(rightfactiondata, leftfactiondata, sorted_left));
 
     console.log(left_data);
     console.log(right_data);
