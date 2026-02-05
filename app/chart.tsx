@@ -432,7 +432,9 @@ export function MyChart({
           <Area
             xAxisId="name"
             yAxisId={chartType == ChartType.attack ? "attacker" : "defender"}
-            dataKey="attacker_ff"
+            dataKey={
+              chartType == ChartType.attack ? "attacker_ff" : "defender_ff"
+            }
             name={"FF of " + name}
             fill="#666600"
             stroke="#666600"
