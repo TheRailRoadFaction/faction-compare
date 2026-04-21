@@ -128,6 +128,16 @@ export const TornMemberApi = z.object({
 
 export type TornMemberApi = z.infer<typeof TornMemberApi>;
 
+export const TornRaidWarsApi = z.object({
+  raiding_faction: z.number(),
+  defending_faction: z.number(),
+  raider_score: z.number(),
+  defender_score: z.number(),
+  start_time: z.number(),
+});
+
+export type TornRaidWarsApi = z.infer<typeof TornRaidWarsApi>;
+
 export const TornFactionBasicApi = z.object({
   ID: z.number(),
   name: z.string(),
@@ -140,7 +150,7 @@ export const TornFactionBasicApi = z.object({
   capacity: z.number(),
   best_chain: z.number(),
   //territory_wars: z.object(),
-  raid_wars: z.object(),
+  raid_wars: z.union([z.array(TornRaidWarsApi), z.object({})]),
   peace: z.object(),
   rank: z.object({
     level: z.number(),
